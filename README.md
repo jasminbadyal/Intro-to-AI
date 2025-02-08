@@ -1,2 +1,2 @@
 # Intro AI
-Homework Assignments for Intro AI Spring 2025
+Intro AI Spring 2025
