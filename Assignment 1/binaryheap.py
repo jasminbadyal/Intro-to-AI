@@ -68,6 +68,21 @@ class BinaryHeap:
             self.swap(index, smallest)
             index = smallest
 
+    def update(self, item, new_priority):
+        """Update the priority of an existing item and re-heapify."""
+        if item not in self.position_map:
+            raise KeyError("Item not found in heap.")
+
+        index = self.position_map[item]
+        self.heap[index] = (new_priority, item[1]) # Update the item at the correct index.
+
+        # Decide whether to heapify up or down
+        parent_index = self.parent(index)
+        if index > 0 and self.heap[index][0] < self.heap[parent_index][0]:
+            self._heapify_up(index)
+        else:
+            self._heapify_down(index)
+
     def peek(self):
         """Return the item with the smallest priority without removing it"""
         return self.heap[0] if self.heap else None
