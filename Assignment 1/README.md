@@ -27,6 +27,7 @@
 	- prove that adaptive a* works
 - part 5
 	- implement adaptive a*
+ 	- compare runtimes
 	- need to test
 - part 6
 	- read up on how to perform a statistical hypothesis test
