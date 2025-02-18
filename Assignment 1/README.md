@@ -17,11 +17,11 @@
 	- implement repeated forward a* algorithm
 	- jasmin already started this
   - use $c \times f(s) - g(s)$ to break ties
-	- need to test
+  - need to test
 - part 3
 	- implement repeated backward a* algorithm
   - compare runtimes
-	- need to test
+  - need to test
 - part 4
 	- Prove that Manhattan distances are consistent
 	- prove that adaptive a* works
