@@ -1,11 +1,11 @@
 # AI HW 1
 
 ## Todo List
-- part 0
+- part 0 - dhvani
 	- set up environment
 	- generate 50 gridworlds of size 101x101 with dfs
 	- store them
-- part 1
+- part 1 - dhvani
 	- read textbook
 	- part a - do the example search problem and explain
 	- part b
@@ -13,26 +13,26 @@
 		- prove that number of moves is bounded by number of unblocked cells squared
 - part 1.5
   - implement binary heap - done
-- part 2
+- part 2 - jasmin 
 	- implement repeated forward a* algorithm
 	- jasmin already started this
   - use $c \times f(s) - g(s)$ to break ties
   - need to test
-- part 3
+- part 3 - jasmin
 	- implement repeated backward a* algorithm
   - compare runtimes
   - need to test
-- part 4
+- part 4 - rajeev
 	- Prove that Manhattan distances are consistent
 	- prove that adaptive a* works
-- part 5
+- part 5 - rajeev
 	- implement adaptive a*
  	- compare runtimes
 	- need to test
-- part 6
+- part 6 - rajeev
 	- read up on how to perform a statistical hypothesis test
 	- describe how you would do it on the class of a* algorithms
-- report
+- report - everyone
 	- write in LaTeX
 	- need to submit .tex file (as part of zip) and .pdf file as final output
 	- need to start this first so that everyone has a place to put their results
