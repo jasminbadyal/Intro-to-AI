@@ -1,9 +1,9 @@
 import math
 from binaryheap import BinaryHeap
 
-# Forward A*
+# Backward A*
 
-class astar:
+class backwardastar:
     def __init__(self, x, y, is_obstacle=False):
         self.x = x
         self.y = y
@@ -30,24 +30,24 @@ def manhattan_distance(a, b):
 def is_valid(x, y, rows, cols):
     return 0 <= x < rows and 0 <= y < cols
 
-def gothroughastar(grid, start, goal):
+def gothroughbackwardastar(grid, start, goal):
     rows = len(grid)
     cols = len(grid[0]) if rows > 0 else 0
     open_list = BinaryHeap()
     closed_set = set()
 
-    start.g = 0
-    open_list.push((start.f(), start))  # Push as a tuple (f-value, astar object)
+    goal.g = 0  # Start from the goal, so its g-value is 0
+    open_list.push((goal.f(), goal))  # Push goal into open list
 
     while not open_list.is_empty():
-        _, current = open_list.pop()  # Pop and extract the astar object
+        _, current = open_list.pop()
 
         if current in closed_set:
             continue
 
         closed_set.add(current)
 
-        if current == goal:
+        if current == start:  # Goal is to reach the start
             path = []
             while current:
                 path.append(current)
@@ -63,7 +63,7 @@ def gothroughastar(grid, start, goal):
                 if tentative_g < neighbor.g:
                     neighbor.parent = current
                     neighbor.g = tentative_g
-                    neighbor.h = manhattan_distance(neighbor, goal)
+                    neighbor.h = manhattan_distance(neighbor, start)  # Heuristic to start
 
                     if neighbor in [item[1] for item in open_list.heap]:
                         # Update priority in the heap
@@ -77,7 +77,7 @@ def gothroughastar(grid, start, goal):
                         open_list._heapify_down(0)
 
                     else:
-                        open_list.push((neighbor.f(), neighbor)) #push as tuple.
+                        open_list.push((neighbor.f(), neighbor))
 
     return None, closed_set
 
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     ]
 
     # Create a grid of astar objects.
-    grid = [[astar(x, y, grid_data[x][y] == 1) for y in range(len(grid_data[0]))] for x in range(len(grid_data))] #add is_obstacle
+    grid = [[backwardastar(x, y, grid_data[x][y] == 1) for y in range(len(grid_data[0]))] for x in range(len(grid_data))]
 
     # Define start and goal positions
     start_x, start_y = 0, 0
@@ -102,11 +102,11 @@ if __name__ == "__main__":
     start_node = grid[start_x][start_y]
     goal_node = grid[goal_x][goal_y]
 
-    # Run A*
-    path, closed_set = gothroughastar(grid, start_node, goal_node)
+    # Run Backward A*
+    path, closed_set = gothroughbackwardastar(grid, start_node, goal_node)
 
     if path:
-        print("Path found:")
+        print("Path found (Backward A*):")
         for node in path:
             print(f"({node.x}, {node.y})")
 
