@@ -76,13 +76,19 @@ class Maze:
                 file.write(line)
 
 
-    def display(self):
+    def display(self, start:tuple=None, goal:tuple=None, path:list=None):
         print(" " + "_" * 101)
 
-        for row in self.grid:
+        for r, row in enumerate(self.grid):
             str = "|"
-            for item in row:
-                if item == 1:
+            for c, item in enumerate(row):
+                if (r, c) == start:
+                    str += "S"
+                elif (r, c) == goal:
+                    str += "G"
+                elif path and (r, c) in path:
+                    str += "+"
+                elif item == 1:
                     str += "X"
                 elif item == 0:
                     str += " "

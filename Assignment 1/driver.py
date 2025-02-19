@@ -10,7 +10,7 @@ def loadMazes():
         path = os.path.join(parent_dir, file)
 
         if os.path.exists(path):
-            maze = Maze.load(path)
+            mazes.append(Maze.load(path))
         else:
             raise FileNotFoundError("Missing " + file)
     
@@ -27,4 +27,5 @@ def generateMazes():
         mazes[-1].save(path)
 
 if __name__ == "__main__":
-    loadMazes()
+    mazes = loadMazes()
+    mazes[0].display()
