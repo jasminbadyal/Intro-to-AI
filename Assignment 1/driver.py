@@ -13,6 +13,8 @@ def loadMazes():
             maze = Maze.load(path)
         else:
             raise FileNotFoundError("Missing " + file)
+    
+    return mazes
 
 # this should only be called once to generate 50 mazes if they are there do not use this again
 def generateMazes():
