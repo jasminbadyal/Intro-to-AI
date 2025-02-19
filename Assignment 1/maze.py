@@ -1,3 +1,4 @@
+from os import path
 import random
 
 
@@ -25,7 +26,6 @@ class Maze:
                 stack.append((r, c))
             else:
                 self.grid[r][c] = 1
-
 
         unvisited = set()
         stack = []
@@ -59,6 +59,22 @@ class Maze:
             r, c = unvisited.pop()
             fill(r, c)
             stack.append((r, c))
+
+    @classmethod
+    def load(cls, path:path):
+        maze = cls()
+        with open(path, "r") as file:
+            for i, line in enumerate(file):
+                line
+                maze.grid[i] = [int(bit) for bit in line.strip()]
+        return maze
+
+    def save(self, path:path):
+        with open(path, "w") as file:
+            for i in range(len(self.grid)):
+                line = "".join(map(str, self.grid[i])) + "\n"
+                file.write(line)
+
 
     def display(self):
         print(" " + "_" * 101)
