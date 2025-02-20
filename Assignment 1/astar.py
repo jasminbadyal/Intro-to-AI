@@ -1,7 +1,7 @@
 import math
 from binaryheap import BinaryHeap
 
-# Forward A*
+# Forward A* algorithm
 
 class astar:
     def __init__(self, x, y, is_obstacle=False):

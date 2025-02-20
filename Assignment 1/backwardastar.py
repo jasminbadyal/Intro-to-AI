@@ -1,7 +1,7 @@
 import math
 from binaryheap import BinaryHeap
 
-# Backward A*
+# Backward A* algorithm
 
 class backwardastar:
     def __init__(self, x, y, is_obstacle=False):
