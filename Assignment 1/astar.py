@@ -1,7 +1,6 @@
+# astar.py
 import math
 from binaryheap import BinaryHeap
-
-# Forward A* algorithm
 
 class astar:
     def __init__(self, x, y, is_obstacle=False):
@@ -19,10 +18,17 @@ class astar:
         return self.f() < other.f()
 
     def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
+        if isinstance(other, astar):
+            return self.x == other.x and self.y == other.y
+        return False
 
     def __hash__(self):
         return hash((self.x, self.y))
+    
+    def __contains__(self, item): 
+      if isinstance(item, astar):
+        return self.x == item.x and self.y == item.y
+      return False
 
 def manhattan_distance(a, b):
     return abs(a.x - b.x) + abs(a.y - b.y)
@@ -30,17 +36,18 @@ def manhattan_distance(a, b):
 def is_valid(x, y, rows, cols):
     return 0 <= x < rows and 0 <= y < cols
 
-def gothroughastar(grid, start, goal):
+def gothroughastar(grid, start, goal, tie_break='larger'):
     rows = len(grid)
     cols = len(grid[0]) if rows > 0 else 0
     open_list = BinaryHeap()
     closed_set = set()
 
     start.g = 0
-    open_list.push((start.f(), start))  # Push as a tuple (f-value, astar object)
+    start.h = manhattan_distance(start, goal)
+    open_list.push((start.f(), start))
 
     while not open_list.is_empty():
-        _, current = open_list.pop()  # Pop and extract the astar object
+        _, current = open_list.pop()
 
         if current in closed_set:
             continue
@@ -56,8 +63,8 @@ def gothroughastar(grid, start, goal):
 
         for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
             nx, ny = current.x + dx, current.y + dy
-            if is_valid(nx, ny, rows, cols) and not grid[nx][ny].is_obstacle:
-                neighbor = grid[nx][ny]
+            if is_valid(nx, ny, rows, cols) and not grid[ny][nx].is_obstacle: #Corrected grid access
+                neighbor = grid[ny][nx] #Corrected grid access
                 tentative_g = current.g + 1
 
                 if tentative_g < neighbor.g:
@@ -65,66 +72,15 @@ def gothroughastar(grid, start, goal):
                     neighbor.g = tentative_g
                     neighbor.h = manhattan_distance(neighbor, goal)
 
-                    if neighbor in [item[1] for item in open_list.heap]:
-                        # Update priority in the heap
-                        new_heap = BinaryHeap()
-                        for priority, item in open_list.heap:
-                            if item == neighbor:
-                                new_heap.push((neighbor.f(), neighbor))
-                            else:
-                                new_heap.push((priority, item))
-                        open_list.heap = new_heap.heap
-                        open_list._heapify_down(0)
-
+                    if tie_break == 'larger':
+                        c = rows * cols + 1
+                        priority = c * neighbor.f() - neighbor.g
                     else:
-                        open_list.push((neighbor.f(), neighbor)) #push as tuple.
+                        priority = neighbor.f() + neighbor.g
+
+                    if neighbor in open_list.position_map:
+                        open_list.update((priority, neighbor))
+                    else:
+                        open_list.push((priority, neighbor))
 
     return None, closed_set
-
-# Example Usage and Testing
-if __name__ == "__main__":
-    # Create a simple grid (0: free, 1: obstacle)
-    grid_data = [
-        [0, 0, 0, 0, 0],
-        [0, 1, 1, 0, 0],
-        [0, 0, 0, 0, 1],
-        [1, 1, 0, 0, 0],
-        [0, 0, 0, 1, 0]
-    ]
-
-    # Create a grid of astar objects.
-    grid = [[astar(x, y, grid_data[x][y] == 1) for y in range(len(grid_data[0]))] for x in range(len(grid_data))] #add is_obstacle
-
-    # Define start and goal positions
-    start_x, start_y = 0, 0
-    goal_x, goal_y = 4, 4
-
-    start_node = grid[start_x][start_y]
-    goal_node = grid[goal_x][goal_y]
-
-    # Run A*
-    path, closed_set = gothroughastar(grid, start_node, goal_node)
-
-    if path:
-        print("Path found:")
-        for node in path:
-            print(f"({node.x}, {node.y})")
-
-        # Visualize the path on the grid (optional)
-        visual_grid = [row[:] for row in grid_data]
-        for node in path:
-            visual_grid[node.x][node.y] = 'P'
-
-        print("\nVisualized Path:")
-        for row in visual_grid:
-            print(row)
-
-        print("\nClosed Set:")
-        for node in closed_set:
-            print(f"({node.x}, {node.y})")
-
-    else:
-        print("No path found.")
-        print("\nClosed Set:")
-        for node in closed_set:
-            print(f"({node.x}, {node.y})")

@@ -1,100 +1,71 @@
-from os import path
 import random
-
+from astar import astar
 
 class Maze:
-    grid = [[-1 for _ in range(101)] for _ in range(101)]
-    
-    def __init__(self):
-        def get_unvisited_neighbors(r:int, c:int):
-            neighbors = []
+    def __init__(self, width=101, height=101):
+        self.width = width
+        self.height = height
+        self.grid = [[1 for _ in range(width)] for _ in range(height)]  # Initialize with walls
 
-            if r != 0 and (r - 1, c) in unvisited:
-                neighbors.append((r - 1, c))
-            if r != len(self.grid) - 1 and (r + 1, c) in unvisited:
-                neighbors.append((r + 1, c))
-            if c != 0 and (r, c - 1) in unvisited:
-                neighbors.append((r, c - 1))
-            if c != len(self.grid[0]) - 1 and (r, c + 1) in unvisited:
-                neighbors.append((r, c + 1))
+        self.generate_prim()
 
-            return neighbors
+    def generate_prim(self):
+        start_x, start_y = random.randint(1, self.width - 2), random.randint(1, self.height - 2)
+        self.grid[start_y][start_x] = 0
 
-        def fill(r:int, c:int):
-            if random.random() < 0.7:
-                self.grid[r][c] = 0
-                stack.append((r, c))
-            else:
-                self.grid[r][c] = 1
+        frontier = [(start_x + dx, start_y + dy, start_x, start_y)
+                    for dx, dy in [(0, 2), (0, -2), (2, 0), (-2, 0)]
+                    if 1 <= start_x + dx < self.width - 1 and 1 <= start_y + dy < self.height - 1]
 
-        unvisited = set()
-        stack = []
+        while frontier:
+            fx, fy, cx, cy = random.choice(frontier)
+            frontier.remove((fx, fy, cx, cy))
 
-        for i in range(101):
-            for j in range(101):
-                unvisited.add((i, j))
+            if self.grid[fy][fx] == 1:
+                self.grid[fy][fx] = 0
+                self.grid[(fy + cy) // 2][(fx + cx) // 2] = 0
 
-        start_r = random.randint(0, 100)
-        start_c  = random.randint(0, 100)
-        unvisited.remove((start_r, start_c))
-        stack.append((start_r, start_c))
-
-        while unvisited:
-            while stack:
-                r, c = stack[-1]
-                unvisited_neighbors = get_unvisited_neighbors(r, c)
-
-                if unvisited_neighbors:
-                    new_r, new_c = random.choice(unvisited_neighbors)
-                    unvisited.remove((new_r, new_c))
-                    fill(new_r, new_c)
-                else:
-                    if self.grid[r][c] == -1:
-                        fill(r, c)
-                    stack.pop()
-
-            if not unvisited:
-                break
-
-            r, c = unvisited.pop()
-            fill(r, c)
-            stack.append((r, c))
-
-    @classmethod
-    def load(cls, path:path):
-        maze = cls()
-        with open(path, "r") as file:
-            for i, line in enumerate(file):
-                line
-                maze.grid[i] = [int(bit) for bit in line.strip()]
-        return maze
-
-    def save(self, path:path):
-        with open(path, "w") as file:
-            for i in range(len(self.grid)):
-                line = "".join(map(str, self.grid[i])) + "\n"
-                file.write(line)
-
+                frontier += [(fx + dx, fy + dy, fx, fy)
+                             for dx, dy in [(0, 2), (0, -2), (2, 0), (-2, 0)]
+                             if 1 <= fx + dx < self.width - 1 and 1 <= fy + dy < self.height - 1]
 
     def display(self, start=None, goal=None, path=None):
-        print(" " + "_" * 101)
+            print(" " + "_" * (self.width + 2))
+            for y in range(self.height):
+                        row_str = "|"
+                        for x in range(self.width):
+                            current_node = astar(x, y)  # Create a temporary astar object for comparison
+                            if start and start == current_node:
+                                row_str += "S"
+                            elif goal and goal == current_node:
+                                row_str += "G"
+                            elif path and any(node == current_node for node in path):
+                                row_str += "."  # Mark path
+                            elif self.grid[y][x] == 1:
+                                row_str += "X"
+                            else:
+                                row_str += " "
+                        row_str += "|"
+                        print(row_str)
+            print(" " + "‾" * (self.width + 2))
 
-        for r, row in enumerate(self.grid):
-            str = "|"
-            for c, item in enumerate(row):
-                if start and [r, c] == start:
-                    str += "S"
-                elif goal and [r, c] == goal:
-                    str += "G"
-                elif path and [r, c] in path:
-                    str += "+"
-                elif item == 1:
-                    str += "X"
-                elif item == 0:
-                    str += " "
-                elif item == -1:
-                    str += "?"
-            str += "|"
-            print(str)
+    @classmethod
+    def load(cls, path_to_file):
+        maze = cls()
+        with open(path_to_file, "r") as file:
+            lines = file.readlines()
+            maze.height = len(lines)
+            maze.width = len(lines[0].strip()) if lines else 0
+            maze.grid = [[int(bit) for bit in line.strip()] for line in lines]
+        return maze
 
-        print(" " + "‾" * 101)
+    def save(self, path_to_file):
+        with open(path_to_file, "w") as file:
+            for row in self.grid:
+                file.write("".join(map(str, row)) + "\n")
+
+# Example usage to print a maze:
+if __name__ == "__main__":
+        random.seed(42)  # Add this line to seed the random number generator
+        maze = Maze()  # Create a new maze
+        maze.display()  # Display the maze
