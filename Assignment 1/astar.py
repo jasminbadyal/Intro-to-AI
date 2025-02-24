@@ -34,7 +34,7 @@ def manhattan_distance(a, b):
     return abs(a.x - b.x) + abs(a.y - b.y)
 
 def is_valid(x, y, rows, cols):
-    return 0 <= x < rows and 0 <= y < cols
+    return 0 <= x < cols and 0 <= y < rows
 
 def gothroughastar(grid, start, goal, tie_break='larger'):
     rows = len(grid)
