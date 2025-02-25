@@ -28,6 +28,9 @@ class Maze:
             else:
                 self.grid[r][c] = 1
 
+        self.width = width
+        self.height = height
+        
         unvisited = set()
         stack = []
 
