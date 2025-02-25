@@ -30,25 +30,42 @@ class Maze:
                              if 1 <= fx + dx < self.width - 1 and 1 <= fy + dy < self.height - 1]
 
     def display(self, start=None, goal=None, path=None):
-            print(" " + "_" * (self.width + 2))
-            for y in range(self.height):
-                        row_str = "|"
-                        for x in range(self.width):
-                            current_node = astar(x, y)  # Create a temporary astar object for comparison
-                            if start and start == current_node:
-                                row_str += "S"
-                            elif goal and goal == current_node:
-                                row_str += "G"
-                            elif path and any(node == current_node for node in path):
-                                row_str += "."  # Mark path
-                            elif self.grid[y][x] == 1:
-                                row_str += "X"
-                            else:
-                                row_str += " "
-                        row_str += "|"
-                        print(row_str)
-            print(" " + "‾" * (self.width + 2))
+        print(" " + "_" * (self.width + 2))
+        for y in range(self.height):
+            row_str = "|"
+            for x in range(self.width):
+                if start and (x, y) == start:
+                    row_str += "S"
+                elif goal and (x, y) == goal:
+                    row_str += "G"
+                elif path and any((node.x, node.y) == (x, y) for node in path):
+                    row_str += "."  # Mark path
+                elif self.grid[y][x] == 1:
+                    row_str += "X"
+                else:
+                    row_str += " "
+            row_str += "|"
+            print(row_str)
+        print(" " + "‾" * (self.width + 2))
 
+    def display_as_string(self, start=None, goal=None, path=None):
+        grid_str = ""
+        for y in range(self.height):
+            row_str = ""
+            for x in range(self.width):
+                if start and (x, y) == start:
+                    row_str += "S"
+                elif goal and (x, y) == goal:
+                    row_str += "G"
+                elif path and any((node.x, node.y) == (x, y) for node in path):
+                    row_str += "."  # Mark path
+                elif self.grid[y][x] == 1:
+                    row_str += "X"
+                else:
+                    row_str += " "
+            grid_str += row_str + "\n"
+        return grid_str
+    
     @classmethod
     def load(cls, path_to_file):
         maze = cls()
@@ -69,3 +86,5 @@ if __name__ == "__main__":
         random.seed(42)  # Add this line to seed the random number generator
         maze = Maze()  # Create a new maze
         maze.display()  # Display the maze
+
+   
