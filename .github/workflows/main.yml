@@ -27,7 +27,7 @@ jobs:
       - name: Run LaTeX
         run: |
           cd 'Assignment 1'
-          latexmk -f -pdf resume.tex
+          latexmk -f -pdf report.tex
           latexmk -c
           
       - name: Commit files
