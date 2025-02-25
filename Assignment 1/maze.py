@@ -2,32 +2,64 @@ import random
 from astar import astar
 
 class Maze:
+    grid = [[-1 for _ in range(101)] for _ in range(101)]
+    width = 0
+    height = 0
+
     def __init__(self, width=101, height=101):
-        self.width = width
-        self.height = height
-        self.grid = [[1 for _ in range(width)] for _ in range(height)]  # Initialize with walls
+        def get_unvisited_neighbors(r:int, c:int):
+            neighbors = []
 
-        self.generate_prim()
+            if r != 0 and (r - 1, c) in unvisited:
+                neighbors.append((r - 1, c))
+            if r != len(self.grid) - 1 and (r + 1, c) in unvisited:
+                neighbors.append((r + 1, c))
+            if c != 0 and (r, c - 1) in unvisited:
+                neighbors.append((r, c - 1))
+            if c != len(self.grid[0]) - 1 and (r, c + 1) in unvisited:
+                neighbors.append((r, c + 1))
 
-    def generate_prim(self):
-        start_x, start_y = random.randint(1, self.width - 2), random.randint(1, self.height - 2)
-        self.grid[start_y][start_x] = 0
+            return neighbors
 
-        frontier = [(start_x + dx, start_y + dy, start_x, start_y)
-                    for dx, dy in [(0, 2), (0, -2), (2, 0), (-2, 0)]
-                    if 1 <= start_x + dx < self.width - 1 and 1 <= start_y + dy < self.height - 1]
+        def fill(r:int, c:int):
+            if random.random() < 0.7:
+                self.grid[r][c] = 0
+                stack.append((r, c))
+            else:
+                self.grid[r][c] = 1
 
-        while frontier:
-            fx, fy, cx, cy = random.choice(frontier)
-            frontier.remove((fx, fy, cx, cy))
+        unvisited = set()
+        stack = []
 
-            if self.grid[fy][fx] == 1:
-                self.grid[fy][fx] = 0
-                self.grid[(fy + cy) // 2][(fx + cx) // 2] = 0
+        for i in range(height):
+            for j in range(width):
+                unvisited.add((i, j))
 
-                frontier += [(fx + dx, fy + dy, fx, fy)
-                             for dx, dy in [(0, 2), (0, -2), (2, 0), (-2, 0)]
-                             if 1 <= fx + dx < self.width - 1 and 1 <= fy + dy < self.height - 1]
+        start_r = random.randint(0, height - 1)
+        start_c  = random.randint(0, width - 1)
+        unvisited.remove((start_r, start_c))
+        stack.append((start_r, start_c))
+
+        while unvisited:
+            while stack:
+                r, c = stack[-1]
+                unvisited_neighbors = get_unvisited_neighbors(r, c)
+
+                if unvisited_neighbors:
+                    new_r, new_c = random.choice(unvisited_neighbors)
+                    unvisited.remove((new_r, new_c))
+                    fill(new_r, new_c)
+                else:
+                    if self.grid[r][c] == -1:
+                        fill(r, c)
+                    stack.pop()
+
+            if not unvisited:
+                break
+
+            r, c = unvisited.pop()
+            fill(r, c)
+            stack.append((r, c))
 
     def display(self, start=None, goal=None, path=None):
         print(" " + "_" * self.width)
