@@ -30,7 +30,7 @@ class Maze:
                              if 1 <= fx + dx < self.width - 1 and 1 <= fy + dy < self.height - 1]
 
     def display(self, start=None, goal=None, path=None):
-        print(" " + "_" * (self.width + 2))
+        print(" " + "_" * self.width)
         for y in range(self.height):
             row_str = "|"
             for x in range(self.width):
@@ -46,7 +46,7 @@ class Maze:
                     row_str += " "
             row_str += "|"
             print(row_str)
-        print(" " + "‾" * (self.width + 2))
+        print(" " + "‾" * self.width)
 
     def display_as_string(self, start=None, goal=None, path=None):
         grid_str = ""
