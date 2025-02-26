@@ -75,8 +75,8 @@ class Maze:
                     row_str += "S"
                 elif goal and (x, y) == goal:
                     row_str += "G"
-                elif path and any((node.x, node.y) == (x, y) for node in path):
-                    row_str += "."  # Mark path
+                elif self.grid[y][x] == 2:  # Check for grid value 2 (path)
+                    row_str += "·"
                 elif self.grid[y][x] == 1:
                     row_str += "X"
                 else:
@@ -94,7 +94,7 @@ class Maze:
                     row_str += "S"
                 elif goal and (x, y) == goal:
                     row_str += "G"
-                elif path and any((node.x, node.y) == (x, y) for node in path):
+                elif self.grid[y][x] == 2:  # Check for grid value 2 (path)
                     row_str += "·"  # Mark path
                 elif self.grid[y][x] == 1:
                     row_str += "X"
@@ -102,7 +102,7 @@ class Maze:
                     row_str += " "
             grid_str += row_str + "\n"
         return grid_str
-    
+
     @classmethod
     def load(cls, path_to_file):
         maze = cls()

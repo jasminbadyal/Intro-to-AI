@@ -159,11 +159,11 @@ print(f"Backward A* (Smaller g-values): Avg Expanded Cells: {avg_backward_smalle
 # File Location for the 50 Mazes
 print("\n50 Mazes are saved in the 'mazes' folder in the same directory as this script.")
 
-# --- Test 5: Maze Test for show
+# --- Test 5: Maze Test (Single Maze for Demonstration) ---
 print("--- Test 4: Maze Test (Single Maze for Demonstration) ---")
 maze = Maze(width=10, height=10)
 start = (1, 1)
-goal = (3, 3)
+goal = (4, 4)
 
 print(f"\n start coordinates:  {start}")
 print(f"\n goal coordinates:  {goal}")
