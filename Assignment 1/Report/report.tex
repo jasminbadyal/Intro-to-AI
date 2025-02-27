@@ -1,0 +1,133 @@
+\documentclass[12pt]{article}
+\usepackage[noindent]{rajeev}
+\setlength{\headheight}{14.49998pt}
+
+\begin{document}
+\title{Intro to AI Assignment 1 - Fast Trajectory Planning}
+\author{Rajeev Atla, Jasmin Badyal, Dhvani Patel}
+\maketitle
+
+
+
+\setcounter{section}{-1}
+\section{Part 0 - Setting Up the Environment}
+
+
+\section{Part 1 - Understanding Methods}
+
+\section{Part 2 - Repeated Forward A*}
+
+\section{Part 3 - Repeated Backward A*}
+
+\section{Part 4 - Heuristics in Adaptive A*}
+
+A heuristic function 
+$h(s)$ 
+is considered consistent if it satisfies the following properties:
+
+\begin{enumerate}
+    \item $h_{\text{goal}} = 0$
+    \item $h(s) \leq c(s, a) + h(\text{succ} (s, a))$
+\end{enumerate}
+
+\subsection{Part 4.1 - Manhattan Distance Consistency}
+
+The Manhattan distance in our grid world is defined as
+
+$$
+h(s) = \abs{x_s - x_{\text{goal}}} + \abs{y_s - y_{\text{goal}}}
+$$
+
+When $s = s_\text{goal}$,
+\begin{align*}
+h(s_\text{goal}) &= \abs{x_{\text{goal}} - x_{\text{goal}}} + \abs{y_{\text{goal}} - y_{\text{goal}}} \\
+&= 0\
+\end{align*}
+
+We see that the first condition is satisfied,
+so we move to the next condition:
+the triangle inequality.
+Without loss of generality,
+assume the agent's current state is $s$,
+and the next state will be $s'$,
+directly to the right of $s$.
+The $y$ component of the Manhattan distance doesn't change,
+but the $x$ component will become 
+$\abs{(x_s + 1) - x_{\text{goal}}}$.
+Therefore,
+$h(s') = h(s) \pm 1$.
+The maximum value attainable can be therefore described by the inequality 
+$h(s') \leq h(s) + 1$.
+This assumption can be generalized to all 4 cardinal directions that are represented in the gridworld,
+with moving left changing the $x$ component to $\abs{(x_s - 1) - x_{\text{goal}}}$,
+and moving up or down changing the $y$ component instead.
+
+Recalling that $c(s, a) = 1$ in our gridworld,
+we see that $h(s') \leq h(s) + c(s, a)$,
+so the Manhattan distance is consistent.
+
+\subsection{Part 4.2 - Heuristic Consistency in Adaptive A*}
+
+We need to show that Adaptive A*'s heuristic function is both admissible and consistent.
+We proceed to first show that it is admissible,
+essentially showing that it never overestimates the actual cost.
+Let $h^* (s)$ be the actual cost to reach the goal from state $s$
+Using the heuristic update formula and the definition of shortest path,
+
+\begin{align*}
+    h_{\text{new}} (s) &= g(s_{\text{goal}}) - g(s) \\
+    g(s_{\text{goal}}) &= g(s) + h^*(s) \\
+\end{align*}
+
+Solving this system of equations,
+we see that 
+$h^* (s) = h_{\text{new}} (s)$.
+Therefore,
+the heuristic matches the cost exactly,
+and doesn't overestimate it,
+and is therefore admissible.
+
+We next show that the heuristic is consistent.
+Suppose the agent is in state $s$ and after updating,
+it is in state $s'$.
+We know that 
+$h_{\text{new}} (s) = g(s_{\text{goal}}) - g(s)$,
+which becomes
+$h_{\text{new}} (s') = g(s_{\text{goal}}) - g(s')$.
+Substituting this into the triangle inequality,
+
+\begin{align*}
+g(s_{\text{goal}}) - g(s) & \leq c(s, a) + g(s_{\text{goal}}) - g(s') \\
+-g(s) & \leq c(s, a) - g(s') \\
+g(s') & \geq g(s) + c(s, a) \\
+\end{align*}
+
+The last inequality always holds true because of A*'s path expansion guarantee:
+$$g(s') = \min(g(s'), g(s) + c(s, a))$$
+
+Since these steps are all reversible,
+the trinagle inequality holds for $h_{\text{new}} (s)$,
+making it a consistent heuristic.
+
+In the course of running Adaptive A*,
+action costs can increase.
+If we relax the assumption that the gridworld is unchanging,
+these action cost increases can be brought forth by a change in the maze that blocks a previously unblocked path.
+This means that 
+$g(s)$ 
+has to be recalculated for some states and may increase.
+However,
+this doesn't change the admissibility of $h_\text{new} (s)$
+because it is exactly the true cost of moving from state 
+$s$
+to the goal.
+
+\section{Part 5 - Adaptive A*}
+
+
+
+\section{Part 6 - Statistical Analysis}
+
+
+
+\end{document}

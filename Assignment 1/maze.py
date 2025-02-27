@@ -2,7 +2,7 @@ import random
 from astar import astar
 
 class Maze:
-    grid = [[-1 for _ in range(101)] for _ in range(101)]
+    grid = [[0] * 1 for _ in range(1)] 
     width = 0
     height = 0
 
@@ -31,6 +31,8 @@ class Maze:
         self.width = width
         self.height = height
         
+        self.grid = [[-1 for _ in range(width)] for _ in range(height)]
+
         unvisited = set()
         stack = []
 
@@ -74,7 +76,7 @@ class Maze:
                 elif goal and (x, y) == goal:
                     row_str += "G"
                 elif self.grid[y][x] == 2:  # Check for grid value 2 (path)
-                    row_str += "."
+                    row_str += "·"
                 elif self.grid[y][x] == 1:
                     row_str += "X"
                 else:
@@ -93,7 +95,7 @@ class Maze:
                 elif goal and (x, y) == goal:
                     row_str += "G"
                 elif self.grid[y][x] == 2:  # Check for grid value 2 (path)
-                    row_str += "."  # Mark path
+                    row_str += "·"  # Mark path
                 elif self.grid[y][x] == 1:
                     row_str += "X"
                 else:
@@ -106,20 +108,37 @@ class Maze:
         maze = cls()
         with open(path_to_file, "r") as file:
             lines = file.readlines()
+            lines = lines[1:len(lines) - 1]
+
             maze.height = len(lines)
-            maze.width = len(lines[0].strip()) if lines else 0
-            maze.grid = [[int(bit) for bit in line.strip()] for line in lines]
+            maze.width = len(lines[0]) - 3
+
+            maze.grid = [[-1 for _ in range(maze.width)] for _ in range(maze.height)]
+
+            for i in range(len(lines)):
+                if (i == 0 or i == maze.height):
+                    pass
+                maze.grid[i] = [1 if char == 'X' else 0 for char in lines[i][1:-2]]
+                 
         return maze
 
     def save(self, path_to_file):
+        def mapFunc(x:int):
+            if x:
+                return "X"
+            else:
+                return " "
+            
         with open(path_to_file, "w") as file:
+            file.write(" " + "_" * self.width + "\n")
             for row in self.grid:
-                file.write("".join(map(str, row)) + "\n")
+                file.write("|" + "".join(map(mapFunc, row)) + "|\n")
+            file.write(" " + "‾" * self.width)
 
 # Example usage to print a maze:
 if __name__ == "__main__":
-        random.seed(42)  # Add this line to seed the random number generator
-        maze = Maze()  # Create a new maze
-        maze.display()  # Display the maze
-
-   
+    maze = Maze()  # Create a new maze
+    maze.display()  # Display the maze
+    maze.save("mazes/0.txt")
+    maze_again = Maze.load("mazes/0.txt")
+    maze_again.display()
