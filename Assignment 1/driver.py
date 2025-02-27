@@ -33,8 +33,8 @@ def display_maze_with_path(maze, start, goal, path=None, closed_set=None):
     """Displays the maze with the path and closed set marked."""
     maze_copy = copy.deepcopy(maze)
     if path:
-        for node in path:
-            maze_copy.grid[node.y][node.x] = 2  # Mark path with 2
+        for x, y in path: # Unpack the coordinate pair
+            maze_copy.grid[y][x] = 2  # Mark path with 2
     if closed_set:
         for node in closed_set:
             if maze_copy.grid[node.y][node.x] != 2: #To not overwrite the path.
@@ -45,8 +45,8 @@ def generate_maze_grid_string(maze, start, goal, path=None):
     """Generates a string representation of the maze grid."""
     maze_copy = copy.deepcopy(maze)
     if path:
-        for node in path:
-            maze_copy.grid[node.y][node.x] = 2  # Mark path with 2
+        for x, y in path: # Unpack the coordinate pair
+            maze_copy.grid[y][x] = 2  # Mark path with 2
     return maze_copy.display_as_string(start, goal, path)
 
 if __name__ == "__main__":
@@ -76,13 +76,13 @@ if __name__ == "__main__":
 
     # Forward A*
     forward_path, forward_closed_set, forward_runtime = repeated_forward_a_star(first_maze, first_start, first_goal, 'larger')
-    print(f"Forward A* Path: {[(node.x, node.y) for node in forward_path]}")
+    print(f"Forward A* Path: {forward_path}")
     display_maze_with_path(first_maze, first_start, first_goal, forward_path)
     print(f"Forward A* Expanded Cells: {len(forward_closed_set)}, Runtime: {forward_runtime:.4f} seconds")
 
     # Backward A*
     backward_path, backward_closed_set, backward_runtime = repeated_backward_a_star(first_maze, first_start, first_goal, 'larger')
-    print(f"Backward A* Path: {[(node.x, node.y) for node in backward_path]}")
+    print(f"Backward A* Path: {backward_path}")
     display_maze_with_path(first_maze, first_start, first_goal, backward_path)
     print(f"Backward A* Expanded Cells: {len(backward_closed_set)}, Runtime: {backward_runtime:.4f} seconds")
 

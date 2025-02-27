@@ -20,23 +20,24 @@ def gothroughbackwardastar(grid, start, goal, tie_break='larger'):
         closed_set.add(current)
 
         if current == goal:
-            path = []
+            path_nodes = []
             while current:
-                path.append(current)
+                path_nodes.append(current)
                 current = current.parent
-            return path[::-1], closed_set
+            path_nodes = path_nodes[::-1]
+            path_coordinates = [[node.x, node.y] for node in path_nodes] # Convert to coordinates
+            return path_coordinates, closed_set
 
         for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
             nx, ny = current.x + dx, current.y + dy
-            if is_valid(nx, ny, rows, cols) and not grid[ny][nx].is_obstacle: #Corrected grid access
-                neighbor = grid[ny][nx] #Corrected grid access
+            if is_valid(nx, ny, rows, cols) and not grid[ny][nx].is_obstacle:
+                neighbor = grid[ny][nx]
                 tentative_g = current.g + 1
 
                 if tentative_g < neighbor.g:
                     neighbor.parent = current
                     neighbor.g = tentative_g
-                    # Corrected heuristic calculation:
-                    neighbor.h = manhattan_distance(neighbor, goal) #goal is the original start
+                    neighbor.h = manhattan_distance(neighbor, goal)
                     if tie_break == 'larger':
                         c = rows * cols + 1
                         priority = c * neighbor.f() - neighbor.g
