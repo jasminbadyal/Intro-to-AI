@@ -75,7 +75,7 @@ class Maze:
                     row_str += "S"
                 elif goal and (x, y) == goal:
                     row_str += "G"
-                elif self.grid[y][x] == 2:  # Check for grid value 2 (path)
+                elif path and [x, y] in path:
                     row_str += "·"
                 elif self.grid[y][x] == 1:
                     row_str += "X"
