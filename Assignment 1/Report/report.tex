@@ -123,7 +123,23 @@ Grid:
 
 Start: (0, 0)
 Goal: (2, 2)
+
 \end{verbatim}
+
+\subsubsection{Explanation}
+
+In this grid, '0' represents an open cell, and '1' represents an obstacle. Applying Repeated Backward A*, the search starts from the goal (2, 2). The algorithm explores neighboring open cells, calculating their g and h values. The heuristic guides the search towards the start (0, 0). The path is reconstructed by tracing back from the start to the goal.
+
+The key advantage of Backward A* in this scenario (and others) is that if the goal has a much lower branching factor, the search space is limited from the beginning. In this simple example, we can see that the goal only has two possible neighbors, whereas the start has two as well. In larger mazes, this difference can become much more pronounced.
+
+The performance of Backward A* depends on the specific maze structure. In mazes with a low branching factor near the goal, Backward A* can be more efficient than Forward A*. Conversely, if the start has a lower branching factor, Forward A* is preferred.
+
+Tie-breaking also plays a crucial role. Favoring larger g-values encourages exploration of cells farther from the goal, potentially leading to a wider search. This can be beneficial when the optimal path requires traversing a larger area. Conversely, favoring smaller g-values promotes a more focused, depth-first-like search, which can be faster if the optimal path is relatively direct. However, it may increase the risk of getting stuck in dead ends or local minima.
+
+In larger mazes, the impact of tie-breaking can be more significant. The choice of tie-breaking strategy should align with the expected path characteristics and the desired balance between exploration and exploitation. This test case demonstrates the basic steps of Repeated Backward A* and highlights the importance of tie-breaking strategies in influencing the search process and the resulting path.
+
+
+\subsection{Repeated Forward A*}
 
 \subsubsection{Implementation}
 
