@@ -158,5 +158,3 @@ print(f"Backward A* (Smaller g-values): Avg Expanded Cells: {avg_backward_smalle
 
 # File Location for the 50 Mazes
 print("\n50 Mazes are saved in the 'mazes' folder in the same directory as this script.")
-maze = Maze.load("mazes/0.txt")
-forward_path, forward_closed_set = gothroughastar(maze.grid, maze.grid[0][0], maze.grid[100][100], 'larger', True)
