@@ -1,5 +1,4 @@
 import random
-from astar import astar
 
 class Maze:
     grid = [[0] * 1 for _ in range(1)] 
@@ -65,6 +64,31 @@ class Maze:
             r, c = unvisited.pop()
             fill(r, c)
             stack.append((r, c))
+
+    @classmethod
+    def display(cls, grid, start=None, goal=None, path_latest=None):
+        while path_latest.parent:
+            print(path_latest)
+            path_latest = path_latest.parent
+        print(path_latest)
+
+        # print(" " + "_" * len(grid[0]))
+        # for y in range(len(grid)):
+        #     row_str = "|"
+        #     for x in range(len(grid[0])):
+        #         if start and (x, y) == start:
+        #             row_str += "S"
+        #         elif goal and (x, y) == goal:
+        #             row_str += "G"
+        #         elif path and [x, y] in path:
+        #             row_str += "·"
+        #         elif grid[y][x] == 1:
+        #             row_str += "X"
+        #         else:
+        #             row_str += " "
+        #     row_str += "|"
+        #     print(row_str)
+        # print(" " + "‾" * len(grid[0]))
 
     def display(self, start=None, goal=None, path=None):
         print(" " + "_" * self.width)

@@ -1,6 +1,8 @@
 # astar.py
 import math
+import threading
 from binaryheap import BinaryHeap
+from maze import Maze
 
 class astar:
     def __init__(self, x, y, is_obstacle=False):
@@ -36,7 +38,7 @@ def manhattan_distance(a, b):
 def is_valid(x, y, rows, cols):
     return 0 <= x < cols and 0 <= y < rows
 
-def gothroughastar(grid, start, goal, tie_break='larger'):
+def gothroughastar(grid, start, goal, tie_break='larger',debug=True):
     rows = len(grid)
     cols = len(grid[0]) if rows > 0 else 0
     open_list = BinaryHeap()
@@ -84,5 +86,8 @@ def gothroughastar(grid, start, goal, tie_break='larger'):
                         open_list.update((priority, neighbor))
                     else:
                         open_list.push((priority, neighbor))
+            else:
+                if debug:
+                    threading.Thread(target=Maze.display, args=(grid, start, goal, current))
 
     return None, closed_set

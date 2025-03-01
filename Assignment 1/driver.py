@@ -39,7 +39,7 @@ def display_maze_with_path(maze, start, goal, path=None, closed_set=None):
         for node in closed_set:
             if maze_copy.grid[node.y][node.x] != 2: #To not overwrite the path.
                 maze_copy.grid[node.y][node.x] = 3 #Mark closed set with 3
-    maze_copy.display(start, goal)
+    maze_copy.display(start, goal, path)
 
 def generate_maze_grid_string(maze, start, goal, path=None):
     """Generates a string representation of the maze grid."""
@@ -192,3 +192,6 @@ maze.display(start, goal, forward_path)
 
 print('\n Maze with Backward Path:')
 maze.display(start, goal, backward_path)
+
+maze = Maze.load("mazes/0.txt")
+forward_path, forward_closed_set = gothroughastar(maze.grid, maze.grid[0][0], maze.grid[100][100], 'larger', True)
