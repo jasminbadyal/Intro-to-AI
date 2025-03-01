@@ -25,13 +25,22 @@
 
 \section{Part 2 - The Effects of Ties}
 
-This section delves into the implementation and analysis of two tie-breaking strategies within the Repeated Forward A* algorithm. When multiple cells have the same f-value, the algorithm needs a method to determine which cell to expand next. We investigate the effects of prioritizing cells with smaller g-values versus prioritizing those with larger g-values, comparing their performance in terms of the number of expanded cells.
+This section delves into the implementation and analysis of two tie-breaking strategies within the Repeated Forward A* algorithm. 
+When multiple cells have the same f-value, 
+the algorithm needs a method to determine which cell to expand next. 
+We investigate the effects of prioritizing cells with smaller g-values versus prioritizing those with larger g-values, 
+comparing their performance in terms of the number of expanded cells.
 
 \subsection{Implementation and Code Snippets}
 
-The provided code snippet showcases the implementation of these tie-breaking strategies. The core logic resides within the \texttt{gothroughbackwardastar} function (which, despite its name, implements a forward search). The function utilizes a binary heap (\texttt{BinaryHeap}) to efficiently manage the open list, ensuring that cells with the lowest f-values are prioritized.
+The provided code snippet showcases the implementation of these tie-breaking strategies. 
+The core logic resides within the \texttt{gothroughbackwardastar} function 
+(which, despite its name, implements a forward search). 
+The function utilizes a binary heap (\texttt{BinaryHeap}) to efficiently manage the open list, 
+ensuring that cells with the lowest f-values are prioritized.
 
-The crucial part lies in the priority calculation, which is influenced by the \texttt{tie\_break} parameter:
+The crucial part lies in the priority calculation, 
+which is influenced by the \texttt{tie\_break} parameter:
 
 \begin{lstlisting}[language=Python, basicstyle=\ttfamily]
 if tie_break == 'larger':
@@ -41,27 +50,64 @@ else:
     priority = neighbor.f() + neighbor.g
 \end{lstlisting}
 
-When \texttt{tie\_break} is set to \texttt{'larger'}, the priority is calculated as  \texttt{c * neighbor.f() - neighbor.g}, where \texttt{c} is a constant larger than the maximum possible g-value. This effectively prioritizes cells with larger g-values. Conversely, when \texttt{tie\_break} is not \texttt{'larger'}, the priority is calculated as \texttt{neighbor.f() + neighbor.g}, prioritizing cells with smaller g-values.
+When \texttt{tie\_break} is set to \texttt{'larger'}, 
+the priority is calculated as  \texttt{c * neighbor.f() - neighbor.g}, 
+where \texttt{c} is a constant larger than the maximum possible g-value. 
+This effectively prioritizes cells with larger g-values. 
+Conversely, 
+when \texttt{tie\_break} is not \texttt{'larger'}, 
+the priority is calculated as \texttt{neighbor.f() + neighbor.g}, 
+prioritizing cells with smaller g-values.
 
 \subsection{Observations and Explanations}
 
-The choice of tie-breaking strategy significantly impacts the search behavior and the number of cells expanded. Prioritizing cells with smaller g-values tends to favor a breadth-first-like exploration, expanding nodes closer to the start node first. This can be visualized as a wavefront emanating from the start, gradually exploring the search space.
+The choice of tie-breaking strategy significantly impacts the search behavior and the number of cells expanded. 
+Prioritizing cells with smaller g-values tends to favor a breadth-first-like exploration, 
+expanding nodes closer to the start node first. 
+This can be visualized as a wavefront emanating from the start, 
+gradually exploring the search space.
 
-On the other hand, prioritizing cells with larger g-values encourages a more depth-first-like search, pushing the exploration more directly towards the goal. This strategy prioritizes nodes that have already progressed further from the start, potentially leading to a quicker discovery of the goal if it lies in a direction requiring a longer path.
+On the other hand, prioritizing cells with larger g-values encourages a more depth-first-like search, 
+pushing the exploration more directly towards the goal. 
+This strategy prioritizes nodes that have already progressed further from the start, 
+potentially leading to a quicker discovery of the goal if it lies in a direction requiring a longer path.
 
-Referring to Figure 9, if we start from cell 'A' and aim for cell 'T', the 'larger' g-value strategy might lead to a more direct path along the bottom row, as it prioritizes cells that have already ventured further from the start. In contrast, the 'smaller' g-value strategy might explore more cells in the upper rows before reaching the goal, as it prioritizes cells closer to the start.
+Referring to Figure 9, 
+if we start from cell 'A' and aim for cell 'T', 
+the 'larger' g-value strategy might lead to a more direct path along the bottom row, 
+as it prioritizes cells that have already ventured further from the start. 
+In contrast, 
+the 'smaller' g-value strategy might explore more cells in the upper rows before reaching the goal, 
+as it prioritizes cells closer to the start.
 
-The impact of these strategies on the number of expanded cells depends on the specific maze structure and the location of the goal. In mazes where the goal is located in a direction requiring a long path, the 'larger' g-value strategy might expand fewer cells due to its focus on exploring deeper into the search space. Conversely, in mazes where the goal is relatively close to the start but requires navigating through many local paths, the 'smaller' g-value strategy might expand fewer cells due to its breadth-first approach.
+The impact of these strategies on the number of expanded cells depends on the specific maze structure and the location of the goal. 
+In mazes where the goal is located in a direction requiring a long path, 
+the 'larger' g-value strategy might expand fewer cells due to its focus on exploring deeper into the search space. 
+Conversely, 
+in mazes where the goal is relatively close to the start but requires navigating through many local paths, 
+the 'smaller' g-value strategy might expand fewer cells due to its breadth-first approach.
 
-In conclusion, the choice of tie-breaking strategy in Repeated Forward A* significantly influences the search behavior and the number of expanded cells. The optimal strategy depends on the specific characteristics of the search space and the location of the goal.
+In conclusion, 
+the choice of tie-breaking strategy in Repeated Forward A* significantly influences the search behavior and the number of expanded cells. 
+The optimal strategy depends on the specific characteristics of the search space and the location of the goal.
 
 \section{Part 3 - Repeated Backward A* vs Repeated Forward A*}
 
-The Repeated Forward A* algorithm is a variant of the A* search algorithm designed for pathfinding in dynamic or partially unknown environments. It operates by repeatedly planning a path from the start to the goal, adapting to changes in the environment as they are discovered.
+The Repeated Forward A* algorithm is a variant of the A* search algorithm designed for pathfinding in dynamic or partially unknown environments. 
+It operates by repeatedly planning a path from the start to the goal, 
+adapting to changes in the environment as they are discovered.
 
 \subsection{Implementation Details}
 
-The implementation of Repeated Forward A* involves several key components. The \texttt{astar} class represents a node in the search space, encapsulating its coordinates, g-value (cost from the start), h-value (heuristic estimate), parent node, and obstacle status. The Manhattan distance is used as the heuristic function, ensuring admissibility and consistency.
+The implementation of Repeated Forward A* involves several key components. 
+The \texttt{astar} class represents a node in the search space, 
+encapsulating its coordinates, 
+g-value (cost from the start), 
+h-value (heuristic estimate), 
+parent node, 
+and obstacle status. 
+The Manhattan distance is used as the heuristic function, 
+ensuring admissibility and consistency.
 
 \begin{lstlisting}[language=Python, basicstyle=\ttfamily]
 class astar:
@@ -75,7 +121,13 @@ class astar:
     # ... (other methods)
 \end{lstlisting}
 
-The \texttt{gothroughastar} function implements the core A* logic. It initializes an open list (priority queue) and a closed set. The start node's g-value is set to 0, and its h-value is calculated. The algorithm then enters a loop, iteratively expanding nodes with the lowest f-value (g + h).
+The \texttt{gothroughastar} function implements the core A* logic. 
+It initializes an open list 
+(priority queue) 
+and a closed set. The start node's g-value is set to 0, 
+and its h-value is calculated. 
+The algorithm then enters a loop, 
+iteratively expanding nodes with the lowest f-value (g + h).
 
 \begin{lstlisting}[language=Python, basicstyle=\ttfamily]
 def gothroughastar(grid, start, goal, tie_break='larger'):
@@ -89,15 +141,32 @@ def gothroughastar(grid, start, goal, tie_break='larger'):
         # ... (rest of the loop)
 \end{lstlisting}
 
-Tie-breaking is handled based on the \texttt{tie\_break} parameter, favoring either larger or smaller g-values. This choice can significantly impact the algorithm's behavior. Favoring larger g-values encourages a wider search, while favoring smaller g-values leads to a depth-first-like search.
+Tie-breaking is handled based on the \texttt{tie\_break} parameter, 
+favoring either larger or smaller g-values. 
+This choice can significantly impact the algorithm's behavior. 
+Favoring larger g-values encourages a wider search, 
+while favoring smaller g-values leads to a depth-first-like search.
 
 \subsection{Tie-Breaking Strategies}
 
-The choice of tie-breaking strategy in Repeated Forward A* is crucial for its performance. Favoring larger g-values encourages the algorithm to explore cells further away from the start, potentially leading to a wider search. This strategy can be beneficial in scenarios where the goal is located in a direction requiring a long path.
+The choice of tie-breaking strategy in Repeated Forward A* is crucial for its performance. 
+Favoring larger g-values encourages the algorithm to explore cells further away from the start, 
+potentially leading to a wider search. 
+This strategy can be beneficial in scenarios where the goal is located in a direction requiring a long path.
 
-Conversely, favoring smaller g-values encourages the algorithm to explore cells closer to the start, resulting in a depth-first-like search. This approach might lead to finding a path quicker, especially when the goal is relatively close to the start. However, it may also increase the risk of getting trapped in local minima or dead ends.
+Conversely, 
+favoring smaller g-values encourages the algorithm to explore cells closer to the start, 
+resulting in a depth-first-like search. 
+This approach might lead to finding a path quicker, 
+especially when the goal is relatively close to the start. 
+However, it may also increase the risk of getting trapped in local minima or dead ends.
 
-The \texttt{gothroughbackwardastar} function implements the Repeated Backward A* search algorithm. This function is structurally very similar to \texttt{gothroughastar} but operates in the reverse direction. Instead of starting from the start node and searching towards the goal, it starts from the goal node and searches towards the start node. This reversal of search direction can significantly impact the algorithm's performance, especially in environments where the branching factor differs between the start and goal regions.
+The \texttt{gothroughbackwardastar} function implements the Repeated Backward A* search algorithm. 
+This function is structurally very similar to \texttt{gothroughastar} but operates in the reverse direction. 
+Instead of starting from the start node and searching towards the goal, 
+it starts from the goal node and searches towards the start node. 
+This reversal of search direction can significantly impact the algorithm's performance, 
+especially in environments where the branching factor differs between the start and goal regions.
 
 \begin{lstlisting}[language=Python, basicstyle=\ttfamily]
 def gothroughbackwardastar(grid, start, goal, tie_break='larger'):
@@ -113,7 +182,8 @@ def gothroughbackwardastar(grid, start, goal, tie_break='larger'):
 
 \subsection{Test Case and Explanation}
 
-To illustrate the behavior of Repeated Backward A*, consider a simple test case with a small grid.
+To illustrate the behavior of Repeated Backward A*, 
+consider a simple test case with a small grid:
 
 \begin{verbatim}
 Grid:
@@ -128,16 +198,49 @@ Goal: (2, 2)
 
 \subsubsection{Explanation}
 
-In this grid, '0' represents an open cell, and '1' represents an obstacle. Applying Repeated Backward A*, the search starts from the goal (2, 2). The algorithm explores neighboring open cells, calculating their g and h values. The heuristic guides the search towards the start (0, 0). The path is reconstructed by tracing back from the start to the goal.
+In this grid, 
+'0' represents an open cell, 
+and '1' represents an obstacle. 
+Applying Repeated Backward A*, 
+the search starts from the goal (2, 2). 
+The algorithm explores neighboring open cells, 
+calculating their g and h values. 
+The heuristic guides the search towards the start (0, 0). 
+The path is reconstructed by tracing back from the start to the goal.
 
-The key advantage of Backward A* in this scenario (and others) is that if the goal has a much lower branching factor, the search space is limited from the beginning. In this simple example, we can see that the goal only has two possible neighbors, whereas the start has two as well. In larger mazes, this difference can become much more pronounced.
+The key advantage of Backward A* in this scenario 
+(and others) 
+is that if the goal has a much lower branching factor, 
+the search space is limited from the beginning. 
+In this simple example, 
+we can see that the goal only has two possible neighbors, 
+whereas the start has two as well. 
+In larger mazes, 
+this difference can become much more pronounced.
 
-The performance of Backward A* depends on the specific maze structure. In mazes with a low branching factor near the goal, Backward A* can be more efficient than Forward A*. Conversely, if the start has a lower branching factor, Forward A* is preferred.
+The performance of Backward A* depends on the specific maze structure. 
+In mazes with a low branching factor near the goal, 
+Backward A* can be more efficient than Forward A*. 
+Conversely, 
+if the start has a lower branching factor, 
+Forward A* is preferred.
 
-Tie-breaking also plays a crucial role. Favoring larger g-values encourages exploration of cells farther from the goal, potentially leading to a wider search. This can be beneficial when the optimal path requires traversing a larger area. Conversely, favoring smaller g-values promotes a more focused, depth-first-like search, which can be faster if the optimal path is relatively direct. However, it may increase the risk of getting stuck in dead ends or local minima.
+Tie-breaking also plays a crucial role. 
+Favoring larger g-values encourages exploration of cells farther from the goal, 
+potentially leading to a wider search. 
+This can be beneficial when the optimal path requires traversing a larger area. 
+Conversely, 
+favoring smaller g-values promotes a more focused, 
+depth-first-like search, 
+which can be faster if the optimal path is relatively direct. 
+However, 
+it may increase the risk of getting stuck in dead ends or local minima.
 
-In larger mazes, the impact of tie-breaking can be more significant. The choice of tie-breaking strategy should align with the expected path characteristics and the desired balance between exploration and exploitation. This test case demonstrates the basic steps of Repeated Backward A* and highlights the importance of tie-breaking strategies in influencing the search process and the resulting path.
-
+In larger mazes, 
+the impact of tie-breaking can be more significant. 
+The choice of tie-breaking strategy should align with the expected path characteristics and the desired balance between exploration and exploitation. 
+This test case demonstrates the basic steps of Repeated Backward A*,
+and highlights the importance of tie-breaking strategies in influencing the search process and the resulting path.
 
 \subsection{ Repeated Forward A* }
 
@@ -145,37 +248,90 @@ In larger mazes, the impact of tie-breaking can be more significant. The choice 
 
 The implementation of Repeated Forward A* relies on several key components:
 
-Node Representation: The `astar` class encapsulates a node in the search space, storing its coordinates, $g$-value (cost from the start), $h$-value (heuristic estimate to the goal), parent node (for path reconstruction), and obstacle status. This object-oriented representation facilitates efficient management of nodes during the search process.
+Node Representation: 
+The `astar` class encapsulates a node in the search space, 
+storing its coordinates, 
+$g$-value (cost from the start), 
+$h$-value (heuristic estimate to the goal), 
+parent node (for path reconstruction), 
+and obstacle status. 
+This object-oriented representation facilitates efficient management of nodes during the search process.
 
-Heuristic Function: The Manhattan distance serves as the heuristic function, providing an admissible and consistent estimate of the distance between two nodes. This choice ensures that the algorithm finds the optimal path if one exists.
+Heuristic Function: 
+The Manhattan distance serves as the heuristic function, 
+providing an admissible and consistent estimate of the distance between two nodes. 
+This choice ensures that the algorithm finds the optimal path if one exists.
 
-Priority Queue: A binary heap acts as the priority queue, efficiently managing the open list of nodes to be explored. The heap structure ensures that the node with the lowest $f$-value ($g$ + $h$) is always at the top, enabling quick retrieval.
+Priority Queue: 
+A binary heap acts as the priority queue, 
+efficiently managing the open list of nodes to be explored. 
+The heap structure ensures that the node with the lowest $f$-value 
+($g$ + $h$) 
+is always at the top, enabling quick retrieval.
 
-Search Logic: The `gothroughastar` function encapsulates the core A* search logic. It initializes the open list and closed set, sets the start node's $g$-value to 0, calculates its $h$-value, and then iteratively expands nodes with the lowest $f$-value. The function also handles tie-breaking based on the `tie\_break` parameter, which determines whether to favor larger or smaller $g$-values when $f$-values are equal.
+Search Logic: 
+The `gothroughastar` function encapsulates the core A* search logic. 
+It initializes the open list and closed set, 
+sets the start node's $g$-value to 0, 
+calculates its $h$-value, 
+and then iteratively expands nodes with the lowest $f$-value. 
+The function also handles tie-breaking based on the `tie\_break` parameter, 
+which determines whether to favor larger or smaller $g$-values when $f$-values are equal.
 
 \subsubsection{Tie-Breaking Strategies}
 
-The tie-breaking strategy plays a crucial role in the performance of Repeated Forward A*. Favoring larger $g$-values encourages exploration of nodes farther from the start, potentially leading to a wider search that is beneficial when the goal lies in a direction requiring a longer path. Conversely, favoring smaller $g$-values promotes a depth-first-like search, which can be faster if the goal is close to the start but may increase the risk of getting trapped in local minima or dead ends.
+The tie-breaking strategy plays a crucial role in the performance of Repeated Forward A*. 
+Favoring larger $g$-values encourages exploration of nodes farther from the start, 
+potentially leading to a wider search that is beneficial when the goal lies in a direction requiring a longer path. 
+Conversely, 
+favoring smaller $g$-values promotes a depth-first-like search, 
+which can be faster if the goal is close to the start but may increase the risk of getting trapped in local minima or dead ends.
 
 \subsection{Repeated Backward A*}
 
 \subsubsection{Implementation}
 
-The `gothroughbackwardastar` function implements the Repeated Backward A* algorithm. It shares a similar structure with `gothroughastar` but operates in the reverse direction, starting from the goal node and searching towards the start. This reversal can significantly impact performance, especially in environments where the branching factor (number of neighboring nodes) differs significantly between the start and goal regions.
+The `gothroughbackwardastar` function implements the Repeated Backward A* algorithm.
+It shares a similar structure with `gothroughastar` but operates in the reverse direction,
+starting from the goal node and searching towards the start.
+This reversal can significantly impact performance,
+especially in environments where the branching factor 
+(number of neighboring nodes)
+differs significantly between the start and goal regions.
 
 \subsubsection{Advantages in Specific Scenarios}
 
-Repeated Backward A* can be particularly advantageous when the goal node has a lower branching factor than the start node. By starting the search from the goal, the algorithm effectively prunes the search space early on, as it explores fewer neighbors at each step. This can lead to significant improvements in efficiency, especially in larger mazes or graphs where the difference in branching factors is substantial.
+Repeated Backward A* can be particularly advantageous when the goal node has a lower branching factor than the start node. 
+By starting the search from the goal, the algorithm effectively prunes the search space early on, 
+as it explores fewer neighbors at each step. 
+This can lead to significant improvements in efficiency, 
+especially in larger mazes or graphs where the difference in branching factors is substantial.
 
 \subsection{Comparison and Observations}
 
-Comparing Repeated Forward A* and Repeated Backward A* highlights the importance of considering the environment's structure and the relative branching factors of the start and goal regions. In scenarios where the goal has a lower branching factor, Repeated Backward A* tends to be more efficient, as it explores a smaller portion of the search space. Conversely, when the start has a lower branching factor, Repeated Forward A* often performs better.
+Comparing Repeated Forward A* and Repeated Backward A* highlights the importance of considering the environment's structure and the relative branching factors of the start and goal regions. 
+In scenarios where the goal has a lower branching factor, 
+Repeated Backward A* tends to be more efficient, 
+as it explores a smaller portion of the search space. 
+Conversely, 
+when the start has a lower branching factor, 
+Repeated Forward A* often performs better.
 
-The choice of tie-breaking strategy further influences the behavior of both algorithms. Favoring larger $g$-values promotes a wider search, which can be advantageous when the optimal path requires traversing a larger area. Favoring smaller $g$-values encourages a more focused, depth-first-like search, which may lead to faster solutions in some cases but also carries the risk of getting stuck.
+The choice of tie-breaking strategy further influences the behavior of both algorithms. 
+Favoring larger $g$-values promotes a wider search, 
+which can be advantageous when the optimal path requires traversing a larger area. 
+Favoring smaller $g$-values encourages a more focused, 
+depth-first-like search, 
+which may lead to faster solutions in some cases but also carries the risk of getting stuck.
 
 \subsection{Conclusion}
 
-The selection between Repeated Forward A* and Repeated Backward A* depends on the specific characteristics of the problem and the environment. Analyzing the branching factors of the start and goal regions can provide valuable insights into which algorithm is likely to be more efficient. Additionally, the choice of tie-breaking strategy should align with the expected path characteristics and the desired balance between exploration and exploitation. By carefully considering these factors, one can effectively leverage the strengths of each algorithm to achieve optimal pathfinding performance. 
+The selection between Repeated Forward A* and Repeated Backward A* depends on the specific characteristics of the problem and the environment. 
+Analyzing the branching factors of the start and goal regions can provide valuable insights into which algorithm is likely to be more efficient. 
+Additionally, 
+the choice of tie-breaking strategy should align with the expected path characteristics and the desired balance between exploration and exploitation. 
+By carefully considering these factors, 
+we can effectively leverage the strengths of each algorithm to achieve optimal pathfinding performance. 
 
 
 
@@ -288,6 +444,42 @@ to the goal.
 
 \section{Part 6 - Statistical Analysis}
 
+We will proceed by comparing Repeated Forward A* and Repeated Backward A*.
+Our null hypothesis will be that there is no difference in performance between the two algorithms.
+Our alternative hypothesis will be that there is a statistically significant difference in performance between the two algorithms.
 
+Suppose we have $n$ runs of each algorithm,
+searched on the same $n$ test mazes that are guaranteed to be solvable,
+and run on the same computer for each test maze.
+Using a large number for $n$ will result in a more consistent answer and reduce sampling noise,
+and we expect the results of our experiment to converge to the true performance difference as $n$ grows larger.
+We will record both the runtimes and the number of expanded cells for both algorithms.
+We will then use this data to undergo a paired t-test for both the runtimes and number of expanded cells.
+
+We will proceed by first analyzing the runtimes
+The paired t-statistic is
+
+$$
+t = \frac{\bar{d}}{s_d/\sqrt{n}}
+$$
+
+Here, 
+$\bar{d}, s_d$ are the mean difference between the algorithms' runtimes, 
+and $s_d$ is the standard deviation of the differences in their runtimes.
+The differences are taken for each test case.
+This analysis can be repeated for the each algorithm's number of expanded cells.
+
+For each t-statistic,
+we can choose a significance level such as 
+$\alpha = 0.05$.
+We can find the p-value associated with the t-statistic by looking it up on a t-distribution table using 
+$n-1$ degrees of freedom.
+If the p-value is greater than $\alpha$,
+then we fail to reject to reject the null hypothesis,
+meaning that there is no statistically significant difference between the performance of the two algorithms.
+On the other hand,
+if the p-value is less than $\alpha$,
+then we fail to rejct the alternative hypothesis,
+meaning that there is a statistically significant difference between the two algorithms' performance.
 
 \end{document}
