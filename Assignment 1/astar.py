@@ -91,6 +91,7 @@ def gothroughastar(grid, start, goal, tie_break='larger',debug=True):
                         open_list.push((priority, neighbor))
             else:
                 if debug:
-                    threading.Thread(target=Maze.display, args=(grid, start, goal, current))
+                    print(current)
+                    Maze.display(grid, (start.x, start.y), (goal.x, goal.y), current)
 
     return None, closed_set

@@ -70,7 +70,7 @@ class Maze:
         while path_latest.parent:
             print(path_latest)
             path_latest = path_latest.parent
-        print(path_latest)
+        print("AAAAAa")
 
         # print(" " + "_" * len(grid[0]))
         # for y in range(len(grid)):
@@ -90,24 +90,24 @@ class Maze:
         #     print(row_str)
         # print(" " + "‾" * len(grid[0]))
 
-    def display(self, start=None, goal=None, path=None):
-        print(" " + "_" * self.width)
-        for y in range(self.height):
-            row_str = "|"
-            for x in range(self.width):
-                if start and (x, y) == start:
-                    row_str += "S"
-                elif goal and (x, y) == goal:
-                    row_str += "G"
-                elif path and [x, y] in path:
-                    row_str += "·"
-                elif self.grid[y][x] == 1:
-                    row_str += "X"
-                else:
-                    row_str += " "
-            row_str += "|"
-            print(row_str)
-        print(" " + "‾" * self.width)
+    # def display(self, start=None, goal=None, path=None):
+    #     print(" " + "_" * self.width)
+    #     for y in range(self.height):
+    #         row_str = "|"
+    #         for x in range(self.width):
+    #             if start and (x, y) == start:
+    #                 row_str += "S"
+    #             elif goal and (x, y) == goal:
+    #                 row_str += "G"
+    #             elif path and [x, y] in path:
+    #                 row_str += "·"
+    #             elif self.grid[y][x] == 1:
+    #                 row_str += "X"
+    #             else:
+    #                 row_str += " "
+    #         row_str += "|"
+    #         print(row_str)
+    #     print(" " + "‾" * self.width)
 
     def display_as_string(self, start=None, goal=None, path=None):
         grid_str = ""

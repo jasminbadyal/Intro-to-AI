@@ -23,6 +23,31 @@
 
 \section{Part 1 - Understanding Methods}
 
+a. We established the agent can only observe the four squares immediately adjacent to itself in the gridworld, and any squares we have not encountered yet are assumed to be empty until it is observed otherwise.
+Therefore in Figure 8, the agent can only observe its neighbors 1E, 2D, and 3E, and has no knowledge of any blocked squares. E4 is outside of the observable range and so the agent assumes it is free and the cost to move from 3E to 4E is 1.
+From here we calculate the g + h for each of the neighbors, where g is the cost to get to the neighbor and h is the approximate distance to the goal (ex: manhattan distance):
+
+1E = g + h = 1 + 4 = 5
+2D = g + h = 1 + 4 = 5
+3E = g + h = 1 + 2 = 3
+
+Since E3 has the lowest sum of cost and heuristic values, we greedily select the smallest value. It is not until after we select E3 and do another iteration of A* to observe the neighbors of E3 that we observe E4 is blocked, and correspondingly update the cost to move from E3 to E4 to $\infty$, so that in the next calculation of g + h values E4 can never be selected as the minimum and we have to turn around.
+
+\newline
+
+b. The guarantee that A* either finds a path to the goal state or terminates in finite time is due to the fact that A* maintains a closed list of nodes that have already been expanded in order to avoid cycles within the graph.
+Since A* maintains both a closed list and an open list, a node is added to the open list when it is first discovered as a neighbor and then taken out of the open list and added to the closed list when the node is processed.
+A* does not reprocess previously checked nodes in the closed list during the search.
+Since we have a finite number of unblocked positions in our gridworld which we'll call N, in the worst case we visit all 4N unblocked nodes, process them, and add N nodes to the closed list.
+In the worst case there will also be an upper bound of N nodes in the open list (liberal estimate), since if we encounter a state that's already in the open list but not in the closed list, we keep the smallest associated (g + h) rather than having multiple nodes for the same state in the open list.
+Once popped from the open list, processed, and added to the closed list, nodes cannot be revisited, and so a max of N nodes in the open list will correspond to a max of N nodes processed.
+Once the open list is empty, A* assumes there are no more ways to reach the goal state and the algorithm terminates.
+
+
+
+
+
+
 \section{Part 2 - The Effects of Ties}
 
 This section delves into the implementation and analysis of two tie-breaking strategies within the Repeated Forward A* algorithm. 
