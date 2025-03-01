@@ -33,8 +33,6 @@ From here we calculate the g + h for each of the neighbors, where g is the cost 
 
 Since E3 has the lowest sum of cost and heuristic values, we greedily select the smallest value. It is not until after we select E3 and do another iteration of A* to observe the neighbors of E3 that we observe E4 is blocked, and correspondingly update the cost to move from E3 to E4 to $\infty$, so that in the next calculation of g + h values E4 can never be selected as the minimum and we have to turn around.
 
-\newline
-
 b. The guarantee that A* either finds a path to the goal state or terminates in finite time is due to the fact that A* maintains a closed list of nodes that have already been expanded in order to avoid cycles within the graph.
 Since A* maintains both a closed list and an open list, a node is added to the open list when it is first discovered as a neighbor and then taken out of the open list and added to the closed list when the node is processed.
 A* does not reprocess previously checked nodes in the closed list during the search.
