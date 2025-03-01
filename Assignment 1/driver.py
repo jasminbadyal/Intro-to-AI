@@ -112,49 +112,49 @@ if __name__ == "__main__":
             file.write(f"Backward A* Expanded Cells: {len(backward_closed_set)}, Runtime: {backward_runtime:.4f} seconds\n\n")
 
     # --- Statistical Analysis (50 Grids) ---
-print("\nStatistical Analysis (50 Grids)")
-total_forward_larger_expanded = 0
-total_forward_smaller_expanded = 0
-total_backward_larger_expanded = 0
-total_backward_smaller_expanded = 0
-total_forward_larger_runtime = 0
-total_forward_smaller_runtime = 0
-total_backward_larger_runtime = 0
-total_backward_smaller_runtime = 0
+    print("\nStatistical Analysis (50 Grids)")
+    total_forward_larger_expanded = 0
+    total_forward_smaller_expanded = 0
+    total_backward_larger_expanded = 0
+    total_backward_smaller_expanded = 0
+    total_forward_larger_runtime = 0
+    total_forward_smaller_runtime = 0
+    total_backward_larger_runtime = 0
+    total_backward_smaller_runtime = 0
 
-for maze, start, goal in maze_data:
-    forward_result_larger, forward_closed_set_larger, forward_runtime_larger = repeated_forward_a_star(maze, start, goal, 'larger')
-    forward_result_smaller, forward_closed_set_smaller, forward_runtime_smaller = repeated_forward_a_star(maze, start, goal, 'smaller')
-    backward_result_larger, backward_closed_set_larger, backward_runtime_larger = repeated_backward_a_star(maze, start, goal, 'larger')
-    backward_result_smaller, backward_closed_set_smaller, backward_runtime_smaller = repeated_backward_a_star(maze, start, goal, 'smaller')
+    for maze, start, goal in maze_data:
+        forward_result_larger, forward_closed_set_larger, forward_runtime_larger = repeated_forward_a_star(maze, start, goal, 'larger')
+        forward_result_smaller, forward_closed_set_smaller, forward_runtime_smaller = repeated_forward_a_star(maze, start, goal, 'smaller')
+        backward_result_larger, backward_closed_set_larger, backward_runtime_larger = repeated_backward_a_star(maze, start, goal, 'larger')
+        backward_result_smaller, backward_closed_set_smaller, backward_runtime_smaller = repeated_backward_a_star(maze, start, goal, 'smaller')
 
-    # Accumulate results INSIDE the loop
-    total_forward_larger_expanded += len(forward_closed_set_larger)
-    total_forward_smaller_expanded += len(forward_closed_set_smaller)
-    total_backward_larger_expanded += len(backward_closed_set_larger)
-    total_backward_smaller_expanded += len(backward_closed_set_smaller)
+        # Accumulate results INSIDE the loop
+        total_forward_larger_expanded += len(forward_closed_set_larger)
+        total_forward_smaller_expanded += len(forward_closed_set_smaller)
+        total_backward_larger_expanded += len(backward_closed_set_larger)
+        total_backward_smaller_expanded += len(backward_closed_set_smaller)
 
-    total_forward_larger_runtime += forward_runtime_larger
-    total_forward_smaller_runtime += forward_runtime_smaller
-    total_backward_larger_runtime += backward_runtime_larger
-    total_backward_smaller_runtime += backward_runtime_smaller
+        total_forward_larger_runtime += forward_runtime_larger
+        total_forward_smaller_runtime += forward_runtime_smaller
+        total_backward_larger_runtime += backward_runtime_larger
+        total_backward_smaller_runtime += backward_runtime_smaller
 
-# Calculate Averages (OUTSIDE the loop, after accumulation)
-avg_forward_larger_expanded = total_forward_larger_expanded / 50
-avg_forward_smaller_expanded = total_forward_smaller_expanded / 50
-avg_backward_larger_expanded = total_backward_larger_expanded / 50
-avg_backward_smaller_expanded = total_backward_smaller_expanded / 50
+    # Calculate Averages (OUTSIDE the loop, after accumulation)
+    avg_forward_larger_expanded = total_forward_larger_expanded / 50
+    avg_forward_smaller_expanded = total_forward_smaller_expanded / 50
+    avg_backward_larger_expanded = total_backward_larger_expanded / 50
+    avg_backward_smaller_expanded = total_backward_smaller_expanded / 50
 
-avg_forward_larger_runtime = total_forward_larger_runtime / 50
-avg_forward_smaller_runtime = total_forward_smaller_runtime / 50
-avg_backward_larger_runtime = total_backward_larger_runtime / 50
-avg_backward_smaller_runtime = total_backward_smaller_runtime / 50
+    avg_forward_larger_runtime = total_forward_larger_runtime / 50
+    avg_forward_smaller_runtime = total_forward_smaller_runtime / 50
+    avg_backward_larger_runtime = total_backward_larger_runtime / 50
+    avg_backward_smaller_runtime = total_backward_smaller_runtime / 50
 
-# Output Averages
-print(f"Forward A* (Larger g-values): Avg Expanded Cells: {avg_forward_larger_expanded:.2f}, Avg Runtime: {avg_forward_larger_runtime:.4f} seconds")
-print(f"Forward A* (Smaller g-values): Avg Expanded Cells: {avg_forward_smaller_expanded:.2f}, Avg Runtime: {avg_forward_smaller_runtime:.4f} seconds")
-print(f"Backward A* (Larger g-values): Avg Expanded Cells: {avg_backward_larger_expanded:.2f}, Avg Runtime: {avg_backward_larger_runtime:.4f} seconds")
-print(f"Backward A* (Smaller g-values): Avg Expanded Cells: {avg_backward_smaller_expanded:.2f}, Avg Runtime: {avg_backward_smaller_runtime:.4f} seconds")
+    # Output Averages
+    print(f"Forward A* (Larger g-values): Avg Expanded Cells: {avg_forward_larger_expanded:.2f}, Avg Runtime: {avg_forward_larger_runtime:.4f} seconds")
+    print(f"Forward A* (Smaller g-values): Avg Expanded Cells: {avg_forward_smaller_expanded:.2f}, Avg Runtime: {avg_forward_smaller_runtime:.4f} seconds")
+    print(f"Backward A* (Larger g-values): Avg Expanded Cells: {avg_backward_larger_expanded:.2f}, Avg Runtime: {avg_backward_larger_runtime:.4f} seconds")
+    print(f"Backward A* (Smaller g-values): Avg Expanded Cells: {avg_backward_smaller_expanded:.2f}, Avg Runtime: {avg_backward_smaller_runtime:.4f} seconds")
 
-# File Location for the 50 Mazes
-print("\n50 Mazes are saved in the 'mazes' folder in the same directory as this script.")
+    # File Location for the 50 Mazes
+    print("\n50 Mazes are saved in the 'mazes' folder in the same directory as this script.")
