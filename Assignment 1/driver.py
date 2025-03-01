@@ -158,40 +158,5 @@ print(f"Backward A* (Smaller g-values): Avg Expanded Cells: {avg_backward_smalle
 
 # File Location for the 50 Mazes
 print("\n50 Mazes are saved in the 'mazes' folder in the same directory as this script.")
-
-# --- Test 5: Maze Test (Single Maze for Demonstration) ---
-print("--- Test 4: Maze Test (Single Maze for Demonstration) ---")
-maze = Maze(width=10, height=10)
-start = (1, 1)
-goal = (4, 4)
-
-print(f"\n start coordinates:  {start}")
-print(f"\n goal coordinates:  {goal}")
-
-grid_maze_forward = [[astar(x, y, maze.grid[y][x] == 1) for x in range(maze.width)] for y in range(maze.height)]
-grid_maze_backward = copy.deepcopy(grid_maze_forward)
-for row in grid_maze_backward:
-    for node in row:
-        node.parent = None
-
-start_node_maze_forward = grid_maze_forward[start[1]][start[0]]
-goal_node_maze_forward = grid_maze_forward[goal[1]][goal[0]]
-
-start_node_maze_backward = grid_maze_backward[goal[1]][goal[0]]
-goal_node_maze_backward = grid_maze_backward[start[1]][start[0]]
-
-print("\nMaze before A*:")
-maze.display(start, goal) #Pass start and goal coordinates.
-
-    #Generate path
-forward_path, forward_closed_set = gothroughastar(grid_maze_forward, start_node_maze_forward, goal_node_maze_forward, 'larger')
-backward_path, backward_closed_set_backward = gothroughbackwardastar(grid_maze_backward, start_node_maze_backward, goal_node_maze_backward, 'larger')
-
-print('\n Maze with Forward Path:')
-maze.display(start, goal, forward_path)
-
-print('\n Maze with Backward Path:')
-maze.display(start, goal, backward_path)
-
 maze = Maze.load("mazes/0.txt")
 forward_path, forward_closed_set = gothroughastar(maze.grid, maze.grid[0][0], maze.grid[100][100], 'larger', True)
