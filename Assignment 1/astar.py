@@ -15,6 +15,9 @@ class astar:
 
     def f(self):
         return self.g + self.h
+    
+    def __repr__(self):
+        return f"astar({self.x}, {self.y}, is_obstacle={self.is_obstacle})"
 
     def __lt__(self, other):
         return self.f() < other.f()
