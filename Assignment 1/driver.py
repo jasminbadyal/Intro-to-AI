@@ -50,66 +50,66 @@ def generate_maze_grid_string(maze, start, goal, path=None):
     return maze_copy.display_as_string(start, goal, path)
 
 if __name__ == "__main__":
-#     random.seed(42)  # Seed for consistent results
+    random.seed(42)  # Seed for consistent results
 
-#     maze_data = []
-#     if not os.path.exists("mazes"):
-#         os.makedirs("mazes")
+    maze_data = []
+    if not os.path.exists("mazes"):
+        os.makedirs("mazes")
 
-#     for i in range(50):
-#         maze = Maze()
-#         start = (random.randint(1, maze.width - 2), random.randint(1, maze.height - 2))
-#         goal = (random.randint(1, maze.width - 2), random.randint(1, maze.height - 2))
-#         maze.grid[goal[1]][goal[0]] = 0  # Ensure goal is open
+    for i in range(50):
+        maze = Maze()
+        start = (random.randint(1, maze.width - 2), random.randint(1, maze.height - 2))
+        goal = (random.randint(1, maze.width - 2), random.randint(1, maze.height - 2))
+        maze.grid[goal[1]][goal[0]] = 0  # Ensure goal is open
 
-#         maze_data.append((maze, start, goal))
-#         maze.save(f"mazes/maze{i}.txt")
+        maze_data.append((maze, start, goal))
+        maze.save(f"mazes/maze{i}.txt")
 
-#     # --- Test 4: Maze Test (Single Maze for Demonstration) ---
-#     print("--- Test 4: Maze Test (Single Maze for Demonstration) ---")
-#     first_maze, first_start, first_goal = maze_data[0]
-#     print(f"Start: {first_start}, Goal: {first_goal}")
+    # --- Test 4: Maze Test (Single Maze for Demonstration) ---
+    print("--- Test 4: Maze Test (Single Maze for Demonstration) ---")
+    first_maze, first_start, first_goal = maze_data[0]
+    print(f"Start: {first_start}, Goal: {first_goal}")
 
-#     # Display Original Maze
-#     print("Original Maze:")
-#     display_maze_with_path(first_maze, first_start, first_goal)
+    # Display Original Maze
+    print("Original Maze:")
+    display_maze_with_path(first_maze, first_start, first_goal)
 
-#     # Forward A*
-#     forward_path, forward_closed_set, forward_runtime = repeated_forward_a_star(first_maze, first_start, first_goal, 'larger')
-#     print(f"Forward A* Path: {forward_path}")
-#     display_maze_with_path(first_maze, first_start, first_goal, forward_path)
-#     print(f"Forward A* Expanded Cells: {len(forward_closed_set)}, Runtime: {forward_runtime:.4f} seconds")
+    # Forward A*
+    forward_path, forward_closed_set, forward_runtime = repeated_forward_a_star(first_maze, first_start, first_goal, 'larger')
+    print(f"Forward A* Path: {forward_path}")
+    display_maze_with_path(first_maze, first_start, first_goal, forward_path)
+    print(f"Forward A* Expanded Cells: {len(forward_closed_set)}, Runtime: {forward_runtime:.4f} seconds")
 
-#     # Backward A*
-#     backward_path, backward_closed_set, backward_runtime = repeated_backward_a_star(first_maze, first_start, first_goal, 'larger')
-#     print(f"Backward A* Path: {backward_path}")
-#     display_maze_with_path(first_maze, first_start, first_goal, backward_path)
-#     print(f"Backward A* Expanded Cells: {len(backward_closed_set)}, Runtime: {backward_runtime:.4f} seconds")
+    # Backward A*
+    backward_path, backward_closed_set, backward_runtime = repeated_backward_a_star(first_maze, first_start, first_goal, 'larger')
+    print(f"Backward A* Path: {backward_path}")
+    display_maze_with_path(first_maze, first_start, first_goal, backward_path)
+    print(f"Backward A* Expanded Cells: {len(backward_closed_set)}, Runtime: {backward_runtime:.4f} seconds")
 
-#     # --- Maze Files ---
-#     for i, (maze, start, goal) in enumerate(maze_data):
-#         if i == 0:
-#             continue
-#         filename = os.path.join("mazes", f"maze{i}.txt")
-#         with open(filename, "w") as file:
-#             file.write(f"Maze {i} - Start: {start}, Goal: {goal}\n\n")
+    # --- Maze Files ---
+    for i, (maze, start, goal) in enumerate(maze_data):
+        if i == 0:
+            continue
+        filename = os.path.join("mazes", f"maze{i}.txt")
+        with open(filename, "w") as file:
+            file.write(f"Maze {i} - Start: {start}, Goal: {goal}\n\n")
 
-#             # Original Maze
-#             file.write("Original Maze:\n")
-#             file.write(generate_maze_grid_string(maze, start, goal))
-#             file.write("\n")
+            # Original Maze
+            file.write("Original Maze:\n")
+            file.write(generate_maze_grid_string(maze, start, goal))
+            file.write("\n")
 
-#             # Forward A*
-#             forward_path, forward_closed_set, forward_runtime = repeated_forward_a_star(maze, start, goal, 'larger')
-#             file.write("Forward A* Path:\n")
-#             file.write(generate_maze_grid_string(maze, start, goal, forward_path))
-#             file.write(f"Forward A* Expanded Cells: {len(forward_closed_set)}, Runtime: {forward_runtime:.4f} seconds\n\n")
+            # Forward A*
+            forward_path, forward_closed_set, forward_runtime = repeated_forward_a_star(maze, start, goal, 'larger')
+            file.write("Forward A* Path:\n")
+            file.write(generate_maze_grid_string(maze, start, goal, forward_path))
+            file.write(f"Forward A* Expanded Cells: {len(forward_closed_set)}, Runtime: {forward_runtime:.4f} seconds\n\n")
 
-#             # Backward A*
-#             backward_path, backward_closed_set, backward_runtime = repeated_backward_a_star(maze, start, goal, 'larger')
-#             file.write("Backward A* Path:\n")
-#             file.write(generate_maze_grid_string(maze, start, goal, backward_path))
-#             file.write(f"Backward A* Expanded Cells: {len(backward_closed_set)}, Runtime: {backward_runtime:.4f} seconds\n\n")
+            # Backward A*
+            backward_path, backward_closed_set, backward_runtime = repeated_backward_a_star(maze, start, goal, 'larger')
+            file.write("Backward A* Path:\n")
+            file.write(generate_maze_grid_string(maze, start, goal, backward_path))
+            file.write(f"Backward A* Expanded Cells: {len(backward_closed_set)}, Runtime: {backward_runtime:.4f} seconds\n\n")
 
     # --- Statistical Analysis (50 Grids) ---
     print("\nStatistical Analysis (50 Grids)")

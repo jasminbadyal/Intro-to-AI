@@ -89,9 +89,5 @@ def gothroughastar(grid, start, goal, tie_break='larger',debug=True):
                         open_list.update((priority, neighbor))
                     else:
                         open_list.push((priority, neighbor))
-            else:
-                if debug:
-                    print(current)
-                    Maze.display(grid, (start.x, start.y), (goal.x, goal.y), current)
-
+                        
     return None, closed_set
