@@ -34,6 +34,10 @@ def is_valid(x, y, rows, cols):
     return 0 <= x < cols and 0 <= y < rows
 
 def repeated_astar_forward(grid, start, goal):
+    """
+    Implements Repeated Forward A* based on the provided pseudocode, using BinaryHeap.
+    Outputs all paths in path_history.
+    """
 
     rows = len(grid)
     cols = len(grid[0])
@@ -43,23 +47,21 @@ def repeated_astar_forward(grid, start, goal):
     counter = 0
     path_history = []
     final_path = []
+    agent_path = [start]  # Initialize agent path with the start node
+    path_history.append(agent_path[:])
 
-    # Initialize search(s) to 0 for all nodes
     for row in grid:
         for node in row:
             node.search_id = 0
 
     while current_node != goal_node:
         counter += 1
-
-        # Initialize g(sgoal) and search(sgoal)
         goal_node.g = math.inf
         goal_node.search_id = counter
 
         open_list = BinaryHeap()
         closed_set = set()
 
-        # Initialize g(sstart) and search(sstart)
         current_node.g = 0
         current_node.search_id = counter
 
@@ -77,13 +79,11 @@ def repeated_astar_forward(grid, start, goal):
                 nx, ny = current.x + dx, current.y + dy
                 if is_valid(nx, ny, rows, cols) and not grid[ny][nx].is_obstacle:
                     neighbor = grid[ny][nx]
-
-                    # Lazy g-value initialization
                     if neighbor.search_id < counter:
                         neighbor.g = math.inf
                         neighbor.search_id = counter
 
-                    if neighbor.g > current.g + 1:  # Assuming cost is 1
+                    if neighbor.g > current.g + 1:
                         neighbor.g = current.g + 1
                         neighbor.parent = current
                         neighbor.h = manhattan_distance(neighbor, goal_node)
@@ -93,7 +93,6 @@ def repeated_astar_forward(grid, start, goal):
                         else:
                             open_list.push((neighbor.f(), neighbor))
 
-        # Reconstruct path
         path_nodes = []
         temp_node = goal_node
         while temp_node != current_node:
@@ -108,20 +107,23 @@ def repeated_astar_forward(grid, start, goal):
 
         if goal_node.g != math.inf:
             final_path = path
-            current_node = goal_node
+
+            if len(path) > 1:
+                next_move = path[1]
+                next_node = grid[next_move[1]][next_move[0]]
+                current_node = next_node
+            else:
+                current_node = goal_node
         else:
             if len(path) > 1:
                 next_move = path[1]
                 next_node = grid[next_move[1]][next_move[0]]
-
-                if next_node.is_obstacle:
-                    break
-                else:
+                if not next_node.is_obstacle:
                     current_node = next_node
 
-        # Store path at every step
-        path_history.append(path)
-        print(f"Path added to history: {path}")
+        agent_path.append((current_node.x, current_node.y))
+        path_history.append(agent_path[:])
+        print(f"Path added to history: {agent_path}")
 
     return path_history, final_path
 
@@ -134,17 +136,28 @@ def animate(grid, path_history, final_path, start, goal):
         ax.plot(start[0], start[1], 'gs', markersize=10)
         ax.plot(goal[0], goal[1], 'rs', markersize=10)
 
-        # Display all paths in path_history as blue lines
-        for path in path_history:
-            print("Path length:", len(path))  # Debugging: Print path length
-            x_coords, y_coords = zip(*path)
-            ax.plot(x_coords, y_coords, 'b-', linewidth=2)
+        # Display the agent's position at the current frame
+        if frame < len(path_history):
+            current_path = path_history[frame]
+            if len(current_path) > 0:
+                current_position = current_path[-1]  # Get the last position in the path
+                ax.plot(current_position[0], current_position[1], 'bo', markersize=5)  # Plot the agent's position
+                if frame > 0:
+                    previous_path = path_history[frame - 1]
+                    if len(previous_path)>0:
+                        previous_position = previous_path[-1]
+                        # Change color for each new path segment
+                        if frame % 2 == 0:
+                            line_color = 'b-' # Blue for even frames
+                        else:
+                            line_color = 'g-' # Green for odd frames
+                        ax.plot([previous_position[0], current_position[0]],[previous_position[1], current_position[1]],line_color, linewidth = 2)
 
         if final_path:
             x_coords, y_coords = zip(*final_path)
             ax.plot(x_coords, y_coords, 'r-', linewidth=2)
 
-    ani = animation.FuncAnimation(fig, update, frames=1, interval=500, repeat=False)
+    ani = animation.FuncAnimation(fig, update, frames=len(path_history), interval=500, repeat=False)
     plt.show(block=True)
 
 class Maze:
