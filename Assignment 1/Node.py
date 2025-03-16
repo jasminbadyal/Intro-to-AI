@@ -126,7 +126,7 @@ def repeated_astar_forward(grid, start, goal):
         print(f"Path added to history: {agent_path}")
 
     return path_history, final_path
-
+#
 def animate(grid, path_history, final_path, start, goal):
     fig, ax = plt.subplots()
 
