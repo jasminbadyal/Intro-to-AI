@@ -185,12 +185,12 @@ def animate(grid, path_history, final_path, start, goal, search_starts):
             if len(current_path) > 0:
                 current_position = current_path[-1]
                 if frame in search_starts:
-                    ax.plot(current_position[0], current_position[1], 'yo', markersize=5)
+                    ax.plot(current_position[0], current_position[1], 'yo', markersize=5) #agent is yellow on replan
                 else:
-                    ax.plot(current_position[0], current_position[1], 'bo', markersize=5)
+                    ax.plot(current_position[0], current_position[1], 'bo', markersize=5) #agent is blue otherwise
 
         # Display the final A* path (if available)
-        if final_path and len(final_path) > 1: #Check if final path is longer than 1
+        if final_path and len(final_path) > 1:
             x_coords, y_coords = zip(*final_path)
             ax.plot(x_coords, y_coords, 'r-', linewidth=2)
 
