@@ -33,10 +33,12 @@ def manhattan_distance(a, b):
 def is_valid(x, y, rows, cols):
     return 0 <= x < cols and 0 <= y < rows
 
-def repeated_astar_forward(grid, start, goal):
+
+# CHANGED CODE 
+
+def repeated_astar_forward(grid, start, goal, obstacle_chance=0.1):
     """
-    Implements Repeated Forward A* based on the provided pseudocode, using BinaryHeap.
-    Outputs all paths in path_history.
+    Implements Repeated Forward A* with replanning tracking.
     """
 
     rows = len(grid)
@@ -47,14 +49,20 @@ def repeated_astar_forward(grid, start, goal):
     counter = 0
     path_history = []
     final_path = []
-    agent_path = [start]  # Initialize agent path with the start node
+    agent_path = [start]
     path_history.append(agent_path[:])
+    loop_counter = 0
+    search_starts = []  # Track when replanning occurs
 
     for row in grid:
         for node in row:
             node.search_id = 0
 
     while current_node != goal_node:
+        loop_counter += 1
+        if loop_counter > 1000:
+            print("loop limit reached")
+            return path_history, final_path, search_starts
         counter += 1
         goal_node.g = math.inf
         goal_node.search_id = counter
@@ -106,28 +114,53 @@ def repeated_astar_forward(grid, start, goal):
         path = [(node.x, node.y) for node in path_nodes]
 
         if goal_node.g != math.inf:
-            final_path = path
-
             if len(path) > 1:
                 next_move = path[1]
                 next_node = grid[next_move[1]][next_move[0]]
-                current_node = next_node
+
+                # Add random obstacles
+                if random.random() < obstacle_chance:
+                    rand_x = random.randint(0, cols - 1)
+                    rand_y = random.randint(0, rows - 1)
+                    if not grid[rand_y][rand_x].is_obstacle and (rand_x, rand_y) != goal and (rand_x, rand_y) != start:
+                        grid[rand_y][rand_x].is_obstacle = True
+                        print("Obstacle added at:", rand_x, rand_y) # Debug print
+                    else:
+                        print("Obstacle addition failed") # Debug print
+                else:
+                    print(f"Random value: {random.random()} (obstacle chance: {obstacle_chance})") #debug print.
+
+                if next_node.is_obstacle:
+                    search_starts.append(len(path_history))
+                    if len(agent_path) > 1:
+                        agent_path.pop()
+                        current_node = grid[agent_path[-1][1]][agent_path[-1][0]]
+                        path_history[-1] = agent_path[:]
+                    else:
+                        print("A* search failed to find a path from the start.")
+                        break
+                else:
+                    current_node = next_node
             else:
                 current_node = goal_node
         else:
-            if len(path) > 1:
-                next_move = path[1]
-                next_node = grid[next_move[1]][next_move[0]]
-                if not next_node.is_obstacle:
-                    current_node = next_node
+            search_starts.append(len(path_history))
+            if len(agent_path) > 1:
+                agent_path.pop()
+                current_node = grid[agent_path[-1][1]][agent_path[-1][0]]
+                path_history[-1] = agent_path[:]
+            else:
+                print("A* search failed to find a path from the start.")
+                break
 
         agent_path.append((current_node.x, current_node.y))
         path_history.append(agent_path[:])
         print(f"Path added to history: {agent_path}")
 
-    return path_history, final_path
-#
-def animate(grid, path_history, final_path, start, goal):
+    final_path = agent_path
+    return path_history, final_path, search_starts
+
+def animate(grid, path_history, final_path, start, goal, search_starts):
     fig, ax = plt.subplots()
 
     def update(frame):
@@ -136,24 +169,28 @@ def animate(grid, path_history, final_path, start, goal):
         ax.plot(start[0], start[1], 'gs', markersize=10)
         ax.plot(goal[0], goal[1], 'rs', markersize=10)
 
+        # Display all paths
+        for i in range(min(frame + 1, len(path_history))):
+            current_path = path_history[i]
+            if len(current_path) > 1:
+                x_coords, y_coords = zip(*current_path)
+                if i in search_starts:
+                    ax.plot(x_coords, y_coords, 'y-', linewidth=1)
+                else:
+                    ax.plot(x_coords, y_coords, 'b-', linewidth=1)
+
         # Display the agent's position at the current frame
         if frame < len(path_history):
             current_path = path_history[frame]
             if len(current_path) > 0:
-                current_position = current_path[-1]  # Get the last position in the path
-                ax.plot(current_position[0], current_position[1], 'bo', markersize=5)  # Plot the agent's position
-                if frame > 0:
-                    previous_path = path_history[frame - 1]
-                    if len(previous_path)>0:
-                        previous_position = previous_path[-1]
-                        # Change color for each new path segment
-                        if frame % 2 == 0:
-                            line_color = 'b-' # Blue for even frames
-                        else:
-                            line_color = 'g-' # Green for odd frames
-                        ax.plot([previous_position[0], current_position[0]],[previous_position[1], current_position[1]],line_color, linewidth = 2)
+                current_position = current_path[-1]
+                if frame in search_starts:
+                    ax.plot(current_position[0], current_position[1], 'yo', markersize=5)
+                else:
+                    ax.plot(current_position[0], current_position[1], 'bo', markersize=5)
 
-        if final_path:
+        # Display the final A* path (if available)
+        if final_path and len(final_path) > 1: #Check if final path is longer than 1
             x_coords, y_coords = zip(*final_path)
             ax.plot(x_coords, y_coords, 'r-', linewidth=2)
 
@@ -234,9 +271,9 @@ if __name__ == "__main__":
     start = (2, 2)
     goal = (15, 15)
 
-    path_history, final_path = repeated_astar_forward(node_grid, start, goal)
+    path_history, final_path, search_starts = repeated_astar_forward(node_grid, start, goal)
 
     print("Path History:", path_history)
     print("Final Path:", final_path)
 
-    animate(integer_grid, path_history, final_path, start, goal)
+    animate(integer_grid, path_history, final_path, start, goal, search_starts)
