@@ -1,4 +1,9 @@
 import random
+import time
+
+from matplotlib import pyplot as plt
+from matplotlib.colors import ListedColormap, BoundaryNorm
+import numpy as np
 
 class Maze:
     grid = [[0] * 1 for _ in range(1)] 
@@ -65,6 +70,25 @@ class Maze:
             fill(r, c)
             stack.append((r, c))
 
+        # start and goal
+        self.grid[random.randint(0, 100)][random.randint(0, 100)] = 2
+        self.grid[random.randint(0, 100)][random.randint(0, 100)] = 3
+
+        # display init
+        self.fig, self.ax = plt.subplots(figsize=(10, 10))
+
+        cmap = ListedColormap(["white", "#c2c2c2", "red", "green", "blue"])
+        bounds = [0, 1, 2, 3, 4, 5]
+        norm = BoundaryNorm(bounds, cmap.N)
+
+        self.ax.set_xlabel("x")
+        self.ax.set_ylabel("y")
+        self.ax.xaxis.set_label_position("top")
+        self.ax.xaxis.tick_top()
+        self.im = self.ax.imshow(np.array(self.grid), cmap=cmap, norm=norm)
+
+        self.plt_shown = False
+
     @classmethod
     def display_static(cls, grid, start=None, goal=None, path_latest=None):
         while path_latest.parent:
@@ -89,23 +113,15 @@ class Maze:
         print(" " + "‾" * len(grid[0]))
 
     def display(self, start=None, goal=None, path=None):
-        print(" " + "_" * self.width)
-        for y in range(self.height):
-            row_str = "|"
-            for x in range(self.width):
-                if start and (x, y) == start:
-                    row_str += "S"
-                elif goal and (x, y) == goal:
-                    row_str += "G"
-                elif path and [x, y] in path:
-                    row_str += "·"
-                elif self.grid[y][x] == 1:
-                    row_str += "X"
-                else:
-                    row_str += " "
-            row_str += "|"
-            print(row_str)
-        print(" " + "‾" * self.width)
+        if not self.plt_shown:
+            plt.ion()
+            plt.pause(0.5)
+            self.plt_shown = True
+        else:
+            self.im.set_data(np.array(self.grid))
+            self.fig.canvas.draw_idle()
+            self.fig.canvas.flush_events()
+            time.sleep(0.5)
 
     def display_as_string(self, start=None, goal=None, path=None):
         grid_str = ""
