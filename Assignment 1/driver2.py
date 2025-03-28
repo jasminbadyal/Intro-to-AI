@@ -1,9 +1,8 @@
 import os
 from maze import Maze
+from astar import gothroughastar
 
 if __name__ == "__main__":
     maze = Maze()
-    maze.display()
-    maze.display()
-    maze.display()
+    gothroughastar(maze)
     maze.save("0.txt")

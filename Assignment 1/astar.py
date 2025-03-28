@@ -41,15 +41,15 @@ def manhattan_distance(a, b):
 def is_valid(x, y, rows, cols):
     return 0 <= x < cols and 0 <= y < rows
 
-def gothroughastar(grid, start, goal, tie_break='larger',debug=True):
-    rows = len(grid)
-    cols = len(grid[0]) if rows > 0 else 0
+def gothroughastar(maze, tie_break='larger',debug=True):
+    rows = len(maze.grid)
+    cols = len(maze.grid[0]) if rows > 0 else 0
     open_list = BinaryHeap()
     closed_set = set()
 
-    start.g = 0
-    start.h = manhattan_distance(start, goal)
-    open_list.push((start.f(), start))
+    maze.start.g = 0
+    maze.start.h = manhattan_distance(maze.start, maze.goal)
+    open_list.push((maze.start.f(), maze.start))
 
     while not open_list.is_empty():
         _, current = open_list.pop()
@@ -59,7 +59,7 @@ def gothroughastar(grid, start, goal, tie_break='larger',debug=True):
 
         closed_set.add(current)
 
-        if current == goal:
+        if current == maze.goal:
             path_nodes = []
             while current:
                 path_nodes.append(current)
@@ -70,14 +70,14 @@ def gothroughastar(grid, start, goal, tie_break='larger',debug=True):
 
         for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
             nx, ny = current.x + dx, current.y + dy
-            if is_valid(nx, ny, rows, cols) and not grid[ny][nx].is_obstacle:
-                neighbor = grid[ny][nx]
+            if is_valid(nx, ny, rows, cols) and not maze.grid[ny][nx].value == 1:
+                neighbor = maze.grid[ny][nx]
                 tentative_g = current.g + 1
 
                 if tentative_g < neighbor.g:
                     neighbor.parent = current
                     neighbor.g = tentative_g
-                    neighbor.h = manhattan_distance(neighbor, goal)
+                    neighbor.h = manhattan_distance(neighbor, maze.goal)
 
                     if tie_break == 'larger':
                         c = rows * cols + 1
@@ -89,5 +89,7 @@ def gothroughastar(grid, start, goal, tie_break='larger',debug=True):
                         open_list.update((priority, neighbor))
                     else:
                         open_list.push((priority, neighbor))
+        
+        maze.display(current)
                         
     return None, closed_set
