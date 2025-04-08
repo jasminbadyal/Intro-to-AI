@@ -1,7 +1,7 @@
 - final report is a pdf file
 	- we kinda just put whatever we want + plots below
 - there will be a demo
-- due may 1st, 11:55pm
+- due may 5th, 11:55pm
 - useful links:
 	- http://inst.eecs.berkeley.edu/~cs188/sp11/projects/classification/classification.html - doesn't work without a berkeley login
 	- http://rl.cs.rutgers.edu/fall2019/data.zip - data
