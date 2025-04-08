@@ -30,4 +30,7 @@
 ## digit data formatting
 - each line is 29 characters long
 - ends with a newline character, regardless of emptiness
-- 
+
+
+## face data formatting
+- add notes here
