@@ -5,11 +5,16 @@
 - useful links:
 	- http://inst.eecs.berkeley.edu/~cs188/sp11/projects/classification/classification.html - doesn't work without a berkeley login
 	- http://rl.cs.rutgers.edu/fall2019/data.zip - data
-- we need to implement 3 things: (prlly easiest to split using this)
-	- perceptron
-	- 3-layer NN (input, hidden 1, hidden 2, output) from scratch
-	- 3-layer NN (input, hidden 1, hidden 2, output) using PyTorch
+- data stuff/testing modules (split using this):
+  	- faces data - rajeev
+  	- digits data - dhvani
+  	- testing module - jasmin
+- we need to implement 3 models (also split using this):
+	- perceptron - dhvani
+	- 3-layer NN (input, hidden 1, hidden 2, output) from scratch - rajeev
+	- 3-layer NN (input, hidden 1, hidden 2, output) using PyTorch - jasmin
 - train with 10% - 100% (increments of 10) of the data
+
 - plot
 	- time needed for training vs number of data points used
 	- prediction error (test) + stdev as vs number of data points used
