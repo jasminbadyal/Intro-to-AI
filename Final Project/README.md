@@ -20,3 +20,8 @@
 	- suppose we're doing n% of the data
 	- use a different random sample n% for 5 iterations of training
 	- then combine
+
+## digit data formatting
+- each line is 29 characters long
+- ends with a newline character, regardless of emptiness
+- 
