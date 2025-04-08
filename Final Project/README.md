@@ -15,8 +15,9 @@
 	- prediction error (test) + stdev as vs number of data points used
 - can't use PyTorch unless specifically asked to do so
 - 70% accuracy is "good enough"
-- design our own features - simpler the better
+- design our own features - simpler the better - each pixel could be a feature
 - standard deviation computation
+- 	- choose random seed
 	- suppose we're doing n% of the data
 	- use a different random sample n% for 5 iterations of training
 	- then combine
