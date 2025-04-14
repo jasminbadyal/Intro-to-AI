@@ -30,13 +30,18 @@ jobs:
           cd 'Report'
           latexmk -f -pdf report.tex
           latexmk -c
+          cd ..
+          cd ..
+          cd 'Assignment 3'
+          latexmk -f -pdf hw3.tex
+          latexmk -c
           
       - name: Commit files
         run: |
           git config user.email github-actions@github.com
           git config user.name github-actions
           git add .
-          git commit -m "compile resume and add generated report.pdf files"
+          git commit -m "compile reports and add generated files"
 
       - name: Push
         uses: ad-m/github-push-action@master
