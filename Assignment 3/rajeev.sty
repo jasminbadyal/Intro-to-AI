@@ -1,0 +1,214 @@
+\ProvidesPackage{rajeev}
+
+\RequirePackage{geometry}
+\RequirePackage{mathtools}
+\RequirePackage[dvipsnames]{xcolor}
+\RequirePackage{titlesec}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{amsthm}
+\RequirePackage{lastpage}
+\RequirePackage{fancyhdr}
+\RequirePackage[many]{tcolorbox}
+\RequirePackage{mathabx}
+% \RequirePackage[section]{algorithm}
+% \RequirePackage{indentfirst}
+% \RequirePackage{dirtytalk}
+\RequirePackage{hyperref}
+
+% declare options
+
+\DeclareOption{sans}{
+    \renewcommand{\familydefault}{\sfdefault}
+}
+\DeclareOption{mono}{
+    \renewcommand{\familydefault}{\ttdefault}
+}
+\DeclareOption{stdmargin}{
+    \geometry{margin = 1in, letterpaper, portrait}
+}
+\DeclareOption{noindent}{
+    \setlength{\parindent}{0cm}
+    \setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+}
+\DeclareOption{stdindent}{
+    \setlength{\parindent}{0.5in}
+    \setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+}
+\DeclareOption{a1}{
+    \geometry{margin = 1in, a1paper, portrait}
+}
+\DeclareOption{a2}{
+    \geometry{margin = 1in, a2paper, portrait}
+}
+\DeclareOption{a3}{
+    \geometry{margin = 1in, a3paper, portrait}
+}
+\DeclareOption{a4}{
+    \geometry{margin = 1in, a4paper, portrait}
+}
+\DeclareOption{a5}{
+    \geometry{margin = 1in, a5paper, portrait}
+}
+
+% declar defaults
+\ExecuteOptions{stdmargin, stdindent}
+\ProcessOptions\relax
+
+% hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan
+}
+
+% page margins
+\pagestyle{fancy}
+\cfoot{Page \thepage\ of~\pageref{LastPage}}
+\rhead{R. Atla, J. Badyal, D. Patel}
+
+\renewcommand{\footrulewidth}{0.25pt}
+
+% mostly for ML papers and optimization in general
+\DeclareMathOperator*{\argmin}{arg min}
+\DeclareMathOperator*{\argmax}{arg max}
+
+% sets of numbers
+\newcommand{\CC}{\mathbb C}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\NN}{\mathbb N}
+\newcommand{\QQ}{\mathbb Q}
+\newcommand{\RR}{\mathbb R}
+\newcommand{\RRN}{\mathbb{R}^n}
+\newcommand{\RRM}{\mathbb{R}^m}
+\newcommand{\ZZ}{\mathbb Z}
+
+% expected val/probability/variance
+\newcommand{\PP}[1]{\mathbb{P} \left ( #1 \right)}
+\newcommand{\EE}[1]{\mathbb{E} \left ( #1 \right)}
+\newcommand{\var}[1]{\text{Var} \left( #1 \right)}
+\newcommand{\cov}[1]{\text{Cov} \left( #1 \right)}
+
+% real/complex operators
+\newcommand{\Real}{\mathfrak{Re}}
+\newcommand{\Img}{\mathfrak{Im}}
+
+% delimiter stuff
+\newcommand{\abs}[1]{\left\lvert#1 \right\rvert}
+\newcommand{\pars}[1]{\left (#1 \right)}
+\newcommand{\brak}[1]{\left [ #1 \right]}
+\newcommand{\set}[1]{ \left \{ #1 \right \} }
+\newcommand{\vect}[1]{\left \langle#1 \right \rangle}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\titleformat{\section}{\normalfont\sffamily\Large\bfseries}{\textsf{\color{red}\S \thesection}}{0.5em}{}
+\titleformat{\subsection}{\normalfont\sffamily\Large\bfseries}{\textsf{\color{olive}\S \thesubsection}}{0.5em}{}
+\titleformat{\subsubsection}{\normalfont\sffamily\Large\bfseries}{\color{blue}\S \thesubsubsection}{0.5em}{}
+
+% make every math thing more readable
+\everymath{\displaystyle}
+
+% for classes
+\newcounter{lecture}
+\newcommand{\lecture}[1]{\refstepcounter{lecture}\newpage\section{Lecture \thelecture : #1}}
+
+\newcounter{recitation}
+\newcommand{\recitation}[1]{\refstepcounter{recitation}\newpage\section{Recitation \therecitation : #1}}
+
+% for homework
+
+% key
+% a = alphabetic
+% n = numeric
+% t = title
+
+% TODO: add these to TOC to make indexing easier
+
+\newcounter{problem}
+\newcommand{\problem}{
+  \vspace{-4\parskip}
+  \refstepcounter{problem}
+  \addcontentsline{toc}{section}{Problem \theproblem}
+  \section*{\color{red}Problem \theproblem}
+  \vspace{-4\parskip}
+}
+
+\newcommand{\problemt}[1]{
+  \refstepcounter{problem}
+  \section*{\textcolor{red}{Problem \theproblem}\hspace{0.5em}#1}
+}
+
+\newcounter{subproblemn}
+\counterwithin{subproblemn}{problem}
+\newcommand{\subproblemn}{
+  \refstepcounter{subproblemn}
+  %\addcontentsline{toc}{subsection}{Problem \thesubproblemn}
+  \subsection*{\color{olive}Problem \thesubproblemn}
+}
+
+\newcounter{subsubproblemna}
+\counterwithin{subsubproblemna}{subproblemn}
+\newcommand{\subsubproblemna}{
+  \refstepcounter{subsubproblemna}
+  %\addcontentsline{toc}{subsection}{Problem \thesubproblemn.\alph{subsubproblemna}}
+  \subsection*{\color{blue}Problem \thesubproblemn.\alph{subsubproblemna}}
+}
+
+\newcounter{subsubproblemnn}
+\counterwithin{subsubproblemnn}{subproblemn}
+\newcommand{\subsubproblemnn}{
+  \refstepcounter{subsubproblemnn}
+  %\addcontentsline{toc}{subsection}{Problem \thesubproblemn.\alph{subsubproblemnn}}
+  \subsection*{\color{blue}Problem \thesubsubproblemnn}
+}
+
+\newcommand{\subproblemnt}[1]{
+  \refstepcounter{subproblemn}
+  %\addcontentsline{toc}{subsection}{Problem \theproblem.\thesubproblemn: #1}
+  \subsection*{\textcolor{olive}{Problem \theproblem.\thesubproblemn\hspace{0.5em}}#1}
+}
+
+\newcounter{subproblema}
+\counterwithin{subproblema}{problem}
+\newcommand{\subproblema}{
+  \refstepcounter{subproblema}
+  %\addcontentsline{toc}{subsection}{Problem \theproblem.\alph{\thesubproblema}}
+  \subsection*{\color{olive}Problem \theproblem.\alph{subproblema}}
+  \vspace{-3\parskip}
+}
+
+\newcommand{\subproblemat}[1]{
+  \refstepcounter{subproblema}
+  %\addcontentsline{toc}{subsection}{Problem \theproblem.\alph{\thesubproblema}: #1}
+  \subsection*{\textcolor{olive}{Problem \theproblem.\alph{subproblema}\hspace{0.5em}}#1}
+}
+
+% linear algebra stuff
+\DeclareMathOperator{\spn}{span}
+\newcommand{\bm}[1]{\textbf{#1}}
+\DeclareMathOperator{\nul}{Null}
+\DeclareMathOperator{\ran}{Ran}
+
+% math classes in general
+
+% definitions
+\newtcolorbox[auto counter,number within=section]{definition}[2][]{arc=0pt,outer arc=0pt,colback=red!5!white,colframe=red!75!black,fonttitle=\bfseries,title=Definition~\thetcbcounter: #2,#1}
+
+% theorems
+\newtcolorbox[auto counter, number within = section]{theorem}[2][]{arc=0pt,outer arc=0pt,colback=blue!5!white,colframe=blue!75!black,fonttitle=\bfseries,title=Theorem~\thetcbcounter: #2,#1}
+
+% proofs
+\tcolorboxenvironment{proof}{blanker, breakable, left=5mm, before skip=10pt, after skip=10pt, borderline west={1mm}{0pt}{orange}}
+
+% lemmas
+\newtcolorbox[auto counter, number within = section]{lemma}[2][]{arc=0pt,outer arc=0pt,colback=brown!5!white,colframe=brown!75!black,fonttitle=\bfseries,title=Lemma~\thetcbcounter: #2,#1}
+
+% examples
+\newtcolorbox[auto counter,number within=section]{example}{arc=0pt,outer arc=0pt,colback=green!5!white,colframe=green!75!black,fonttitle=\bfseries,title=Example~\thetcbcounter}
+
+% remarks
+\newtcolorbox[auto counter, number within = section]{remark}{arc=0pt,outer arc=0pt,colback=black!5!white,colframe=black,fonttitle=\bfseries,title=Remark ~\thetcbcounter}
+
+
+\endinput
