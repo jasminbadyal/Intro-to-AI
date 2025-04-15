@@ -11,8 +11,46 @@
 
 
 \begin{document}
-\title{Intro to AI Assignment 1 - Fast Trajectory Planning}
-\author{Rajeev Atla, Jasmin Badyal, Dhvani Patel}
+\title{Intro to AI Assignment 3 - Probabilistic Reasoning}
+\author{Rajeev Atla - 208003072\\ 
+Jasmin Badyal - 208003131\\
+Dhvani Patel - 21006030}
 \maketitle
+
+\section{Problem 1}
+
+\section{Problem 2}
+
+\section{Problem 3}
+
+\section{Problem 4}
+
+We can model the system as a hidden Markov model.
+We can model $X_t$ as a Markov chain with the states $\set{A, B, C, D, E, F}$ and transition matrix:
+
+$$
+\begin{pmatrix}
+0.2 & 0.8 & 0 & 0 & 0 & 0 \\
+0 & 0.2 & 0.8 & 0 & 0 & 0 \\
+0 & 0 & 0.2 & 0.8 & 0 & 0 \\
+0 & 0 & 0 & 0.2 & 0.8 & 0 \\
+0 & 0 & 0 & 0 & 0.2 & 0.8 \\
+0 & 0 & 0 & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
+In addition,
+we have the observation matrices for hot and cold:
+
+\subsection{Part 1}
+
+We know that the rover starts at state A with probability 1,
+so $P(X_1 = A) = 1$.
+The initial state vector is therefore $[1, 0, 0, 0, 0, 0]^T$.
+
+
+
+
+\section{Problem 5}
 
 \end{document}
